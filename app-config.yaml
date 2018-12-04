@@ -26,10 +26,10 @@ resources:
     memory: 768Mi
 fasitResources:
   used:
-#  - alias: loadbalancer:veilarblest
-#    resourceType: loadbalancerconfig
-#  - alias: srvveilarblest
-#    resourceType: credential
+  - alias: loadbalancer:veilarblest
+    resourceType: loadbalancerconfig
+  - alias: srvveilarblest
+    resourceType: credential
   - alias: appdynamics
     resourceType: applicationproperties
 
