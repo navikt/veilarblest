@@ -32,11 +32,10 @@ fasitResources:
     resourceType: credential
   - alias: appdynamics
     resourceType: applicationproperties
-
   exposed:
   - alias: veilarblestAPI
     resourceType: restservice
     path: /veilarblest/api
-
 alertProfiles:
   - common-java-modules
+secrets: true
