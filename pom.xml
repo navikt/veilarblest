@@ -27,6 +27,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>5.2.4</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -37,15 +42,19 @@
         </dependency>
         <dependency>
             <groupId>no.nav.common</groupId>
-            <artifactId>rest</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.common</groupId>
             <artifactId>api-app</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.common</groupId>
             <artifactId>util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.common</groupId>
+            <artifactId>jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.common</groupId>
+            <artifactId>aktor-klient</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -66,6 +75,51 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+
+        <!-- Database -->
+        <!-- TODO: Add jooq and postgres to bom. Also update version of flyway. -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>3.11.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+            <version>3.11.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>3.11.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta-extensions</artifactId>
+            <version>3.11.7</version>
         </dependency>
 
         <!-- test -->
