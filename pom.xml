@@ -84,6 +84,11 @@
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.bettercloud</groupId>
+            <artifactId>vault-java-driver</artifactId>
+            <version>3.1.0</version>
+        </dependency>
 
         <!-- Database -->
         <!-- TODO: Add jooq and postgres to bom. Also update version of flyway. -->

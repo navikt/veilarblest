@@ -1,6 +1,9 @@
 package no.nav.fo.veilarblest.config;
 
-import no.nav.sbl.jdbc.DataSourceFactory;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import lombok.SneakyThrows;
+import no.nav.fo.veilarblest.vault.HikariCPVaultUtil;
 import org.flywaydb.core.Flyway;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -10,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
+import static no.nav.fo.veilarblest.config.ApplicationConfig.APPLICATION_NAME;
 import static no.nav.sbl.util.EnvironmentUtils.EnviromentClass.P;
 import static no.nav.sbl.util.EnvironmentUtils.*;
 
@@ -21,27 +25,44 @@ public class DatabaseConfig {
     public static final String VEILARBLEST_DB_PASSWORD_PROPERTY = "VEILARBLEST_DB_PASSWORD";
 
     @Bean
-    public DataSource dataSource() {
-        return DataSourceFactory.dataSource()
-                .url(getRequiredProperty(VEILARBLEST_DB_URL_PROPERTY))
-                .username(getRequiredProperty(VEILARBLEST_DB_USER_PROPERTY))
-                .password(getRequiredProperty(VEILARBLEST_DB_PASSWORD_PROPERTY))
-                .build();
+    public DataSource adminDataSource() {
+        return dataSource("admin");
     }
 
     @Bean
-    public DSLContext dslContext(DataSource dataSource) {
-        return DSL.using(dataSource, SQLDialect.POSTGRES);
+    public DataSource userDataSource() {
+        return dataSource("user");
     }
 
-    public static void migrateDatabase(DataSource dataSource) {
-        boolean isProd = getEnvironmentClass() == P;
-        String role = isProd ? "veilarblest-admin" : String.join("-", "veilarblest", requireEnvironmentName(), "admin");
+    @Bean
+    public DSLContext dslContext(DataSource userDataSource) {
+        return DSL.using(userDataSource, SQLDialect.POSTGRES);
+    }
+
+    static void migrateDatabase(DataSource dataSource) {
         Flyway.configure()
                 .dataSource(dataSource)
-                .initSql(String.format("SET ROLE \"%s\"", role))
+                .initSql(String.format("SET ROLE \"%s\"", dbRole("admin")))
                 .load()
                 .migrate();
+    }
+
+    @SneakyThrows
+    private HikariDataSource dataSource(String user) {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(getRequiredProperty(VEILARBLEST_DB_URL_PROPERTY));
+        config.setMaximumPoolSize(300);
+        config.setMinimumIdle(1);
+        String mountPath = getEnvironmentClass() == P
+                ? "postgresql/prod"
+                : "postgresql/preprod";
+        return HikariCPVaultUtil.createHikariDataSourceWithVaultIntegration(config, mountPath, dbRole(user));
+    }
+
+    private static String dbRole(String role) {
+        return getEnvironmentClass() == P
+                ? String.join("-", APPLICATION_NAME, role)
+                : String.join("-", APPLICATION_NAME, requireEnvironmentName(), role);
     }
 
 }

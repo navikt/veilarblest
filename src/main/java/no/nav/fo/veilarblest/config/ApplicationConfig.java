@@ -30,11 +30,11 @@ public class ApplicationConfig implements NaisApiApplication {
     public static final String AAD_B2C_CLIENTID_PASSWORD_PROPERTY = "AAD_B2C_CLIENTID_PASSWORD";
 
     @Inject
-    private DataSource dataSource;
+    private DataSource adminDataSource;
 
     @Override
     public void startup(ServletContext servletContext) {
-        migrateDatabase(dataSource);
+        migrateDatabase(adminDataSource);
     }
 
     @Override
