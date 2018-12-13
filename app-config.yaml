@@ -30,6 +30,8 @@ fasitResources:
     resourceType: loadbalancerconfig
   - alias: srvveilarblest
     resourceType: credential
+  - alias: veilarblest.properties
+    resourceType: applicationproperties
   - alias: appdynamics
     resourceType: applicationproperties
   - alias: securityTokenService
