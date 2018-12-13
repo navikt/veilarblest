@@ -14,3 +14,19 @@ mvn test
 # Kjør main-metoden i Main.java
 # For lokal test kjøring kjør MainTest.java
 ```
+
+## Database
+Man må sette følgenede environmentvariabler for tilkobling til postgres database:
+```
+VEILARBLEST_DB_URL=jdbc:postgresql://<HOST>:<PORT>/veilarblest
+VEILARBLEST_DB_USER=<USERNAME>
+VEILARBLEST_DB_PASSWORD=<PASSWORD>
+```
+For å sette opp en postgres database lokalt kan man bruke docker.
+```
+docker run --name veilarblest -e POSTGRES_PASSWORD=<PASSWORD> -d -p 5432:5432 postgres
+docker ps (finn container id)
+docker exec -t <container_id> bash
+psql -U postgres
+CREATE DATABASE veilarblest;
+```
