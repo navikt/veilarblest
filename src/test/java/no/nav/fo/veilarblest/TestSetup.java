@@ -1,13 +1,25 @@
 package no.nav.fo.veilarblest;
 
+import no.nav.dialogarena.config.fasit.FasitUtils;
 import no.nav.dialogarena.config.fasit.ServiceUser;
+import no.nav.fo.veilarblest.config.DatabaseConfig;
+import no.nav.fo.veilarblest.vault.AuthenticationDTO;
+import no.nav.sbl.rest.RestUtils;
+
+import javax.ws.rs.client.Entity;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 import static no.nav.brukerdialog.security.Constants.*;
 import static no.nav.dialogarena.config.fasit.FasitUtils.*;
 import static no.nav.dialogarena.config.fasit.FasitUtils.Zone.FSS;
 import static no.nav.fo.veilarblest.config.ApplicationConfig.*;
+import static no.nav.fo.veilarblest.vault.VaultUtil.VAULT_TOKEN_PROPERTY;
 import static no.nav.sbl.dialogarena.common.cxf.StsSecurityConstants.*;
+import static no.nav.sbl.rest.RestUtils.LONG_READ_CONFIG;
 import static no.nav.sbl.util.EnvironmentUtils.Type.PUBLIC;
+import static no.nav.sbl.util.EnvironmentUtils.Type.SECRET;
 import static no.nav.sbl.util.EnvironmentUtils.setProperty;
 
 public class TestSetup {
@@ -28,7 +40,7 @@ public class TestSetup {
         setProperty(AKTOER_V2_URL_PROPERTY, getWebServiceEndpoint(AKTOER_V2_ALIAS).getUrl(), PUBLIC);
 
         ServiceUser isso_rp_user = getServiceUser("isso-rp-user", APPLICATION_NAME);
-        String loginUrl = getRestService(VEILARBLOGIN_REDIRECT_URL_ALIAS, getDefaultEnvironment()).getUrl();
+        String loginUrl = getRestService(VEILARBLOGIN_REDIRECT_URL_ALIAS).getUrl();
 
         setProperty(ISSO_HOST_URL_PROPERTY_NAME, getBaseUrl("isso-host"), PUBLIC);
         setProperty(ISSO_RP_USER_USERNAME_PROPERTY_NAME, isso_rp_user.getUsername(), PUBLIC);
@@ -39,9 +51,30 @@ public class TestSetup {
         setProperty(VEILARBLOGIN_REDIRECT_URL_URL_PROPERTY, loginUrl, PUBLIC);
 
         ServiceUser aadB2cUser = getServiceUser(AAD_B2C_CLIENTID_ALIAS, APPLICATION_NAME);
-        setProperty(VEILARBAZUREADPROXY_DISCOVERY_URL_PROPERTY, getRestService(VEILARBAZUREADPROXY_DISCOVERY_ALIAS, getDefaultEnvironment()).getUrl(), PUBLIC);
+        setProperty(VEILARBAZUREADPROXY_DISCOVERY_URL_PROPERTY, getRestService(VEILARBAZUREADPROXY_DISCOVERY_ALIAS).getUrl(), PUBLIC);
         setProperty(AAD_B2C_CLIENTID_USERNAME_PROPERTY, aadB2cUser.getUsername(), PUBLIC);
         setProperty(AAD_B2C_CLIENTID_PASSWORD_PROPERTY, aadB2cUser.getPassword(), PUBLIC);
+
+        Properties applicationProperties = getApplicationProperties("veilarblest.properties");
+        System.getProperties().putAll(applicationProperties);
+
+        setProperty(VAULT_TOKEN_PROPERTY, resolveVaultToken(), SECRET);
+    }
+
+    private static String resolveVaultToken() {
+        return RestUtils.withClient(LONG_READ_CONFIG, c -> {
+
+            Map<String, String> data = new HashMap<String, String>() {{
+                put("password", FasitUtils.getFasitPassword());
+            }};
+
+            AuthenticationDTO authenticationDTO = c.target("https://vault.adeo.no/v1/auth/ldap/login")
+                    .path(getFasitUser())
+                    .request()
+                    .post(Entity.json(data), AuthenticationDTO.class);
+            AuthenticationDTO.Auth auth = authenticationDTO.auth;
+            return auth.clientToken;
+        });
     }
 
 }

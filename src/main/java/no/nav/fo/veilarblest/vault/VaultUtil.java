@@ -11,12 +11,15 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class VaultUtil {
     private static final Logger logger = LoggerFactory.getLogger(VaultUtil.class);
+
+    public static final String VAULT_TOKEN_PROPERTY = "VAULT_TOKEN";
 
     private static VaultUtil INSTANCE;
     private Vault vault;
@@ -100,9 +103,14 @@ public class VaultUtil {
 
     private static String getVaultToken() {
         try {
-            Map<String, String> env = System.getenv();
-            if (env.containsKey("VAULT_TOKEN") && !"".equals(env.get("VAULT_TOKEN"))) {
-                return env.get("VAULT_TOKEN");
+            Map<String, String> env = new HashMap<>(System.getenv());
+            System.getProperties().forEach((key, value) -> {
+                if(value instanceof String){
+                    env.put((String) key, (String) value);
+                }
+            });
+            if (env.containsKey(VAULT_TOKEN_PROPERTY) && !"".equals(env.get(VAULT_TOKEN_PROPERTY))) {
+                return env.get(VAULT_TOKEN_PROPERTY);
             } else if (env.containsKey("VAULT_TOKEN_PATH")) {
                 byte[] encoded = Files.readAllBytes(Paths.get(env.get("VAULT_TOKEN_PATH")));
                 return new String(encoded, "UTF-8").trim();
