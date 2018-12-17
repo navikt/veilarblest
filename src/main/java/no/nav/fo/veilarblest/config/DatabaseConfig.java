@@ -54,8 +54,8 @@ public class DatabaseConfig {
         config.setMaximumPoolSize(300);
         config.setMinimumIdle(1);
         String mountPath = getEnvironmentClass() == P
-                ? "postgresql/prod"
-                : "postgresql/preprod";
+                ? "postgresql/prod-fss"
+                : "postgresql/preprod-fss";
         return HikariCPVaultUtil.createHikariDataSourceWithVaultIntegration(config, mountPath, dbRole(user));
     }
 
