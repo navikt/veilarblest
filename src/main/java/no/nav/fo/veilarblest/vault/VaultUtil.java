@@ -106,7 +106,7 @@ public class VaultUtil {
             } else if (env.containsKey("VAULT_TOKEN_PATH")) {
                 byte[] encoded = Files.readAllBytes(Paths.get(env.get("VAULT_TOKEN_PATH")));
                 return new String(encoded, "UTF-8").trim();
-            } else if (Files.exists(Paths.get("/var/run/secrets/naisd.io/vault/vault_token"))) {
+            } else if (Files.exists(Paths.get("/var/run/secrets/nais.io/vault/vault_token"))) {
                 byte[] encoded = Files.readAllBytes(Paths.get("/var/run/secrets/naisd.io/vault/vault_token"));
                 return new String(encoded, "UTF-8").trim();
             } else {
