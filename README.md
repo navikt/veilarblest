@@ -26,7 +26,7 @@ For å sette opp en postgres database lokalt kan man bruke docker.
 ```
 docker run --name veilarblest -e POSTGRES_PASSWORD=<PASSWORD> -d -p 5432:5432 postgres
 docker ps (finn container id)
-docker exec -t <container_id> bash
+docker exec -it <container_id> bash
 psql -U postgres
 CREATE DATABASE veilarblest;
 ```
