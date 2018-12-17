@@ -1,6 +1,6 @@
 package no.nav.fo.veilarblest.config;
 
-import no.nav.apiapp.ApiApplication.NaisApiApplication;
+import no.nav.apiapp.ApiApplication;
 import no.nav.apiapp.config.ApiAppConfigurator;
 import no.nav.dialogarena.aktor.AktorConfig;
 import no.nav.fo.veilarblest.rest.LestRessurs;
@@ -20,7 +20,7 @@ import static no.nav.fo.veilarblest.config.DatabaseConfig.migrateDatabase;
         CacheConfig.class,
         LestRessurs.class
 })
-public class ApplicationConfig implements NaisApiApplication {
+public class ApplicationConfig implements ApiApplication {
 
     public static final String APPLICATION_NAME = "veilarblest";
     public static final String AKTOER_V2_URL_PROPERTY = "AKTOER_V2_ENDPOINTURL";

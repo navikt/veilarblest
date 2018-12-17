@@ -1,6 +1,6 @@
 package no.nav.fo.veilarblest.rest;
 
-import no.nav.common.auth.SubjectHandler;
+import no.nav.brukerdialog.security.domain.IdentType;
 import no.nav.dialogarena.aktor.AktorService;
 import no.nav.fo.veilarblest.domain.tables.records.LestRecord;
 import no.nav.fo.veilarblest.rest.domain.LestDto;
@@ -14,6 +14,9 @@ import javax.ws.rs.QueryParam;
 import java.time.Instant;
 
 import static java.time.ZoneId.systemDefault;
+import static no.nav.brukerdialog.security.domain.IdentType.EksternBruker;
+import static no.nav.common.auth.SubjectHandler.getIdent;
+import static no.nav.common.auth.SubjectHandler.getIdentType;
 import static no.nav.fo.veilarblest.domain.enums.Ressurs.aktivitetsplan;
 import static no.nav.fo.veilarblest.domain.tables.Lest.LEST;
 import static org.jooq.impl.DSL.currentLocalDateTime;
@@ -32,8 +35,11 @@ public class LestRessurs {
     @Path("/aktivitetsplan/les")
     public LestDto lesAktivitetsplan(@QueryParam("fnr") String fnr) {
 
-        String brukerId = SubjectHandler.getIdent().orElseThrow(RuntimeException::new);
-        String aktorId = aktorService.getAktorId(fnr).orElseThrow(RuntimeException::new);
+        IdentType identType = getIdentType().orElseThrow(RuntimeException::new);
+
+        String brukerId = getIdent().orElseThrow(RuntimeException::new);
+        String eier = identType.equals(EksternBruker) ? brukerId : fnr;
+        String aktorId = aktorService.getAktorId(eier).orElseThrow(RuntimeException::new);
 
         LestDto result = db.selectFrom(LEST)
                 .where(LEST.AV.eq(brukerId))
