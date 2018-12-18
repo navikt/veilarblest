@@ -51,7 +51,7 @@ public class DatabaseConfig {
     private HikariDataSource dataSource(String user) {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(getRequiredProperty(VEILARBLEST_DB_URL_PROPERTY));
-        config.setMaximumPoolSize(300);
+        config.setMaximumPoolSize(3);
         config.setMinimumIdle(1);
         String mountPath = getEnvironmentClass() == P
                 ? "postgresql/prod-fss"
