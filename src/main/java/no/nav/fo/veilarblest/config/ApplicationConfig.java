@@ -35,22 +35,6 @@ public class ApplicationConfig implements ApiApplication {
 
     @Override
     public void startup(ServletContext servletContext) {
-        /*
-         * TODO
-         * TODO
-         * TODO
-         * TODO
-         * TODO
-         * TODO
-         * TODO
-         * TODO Disse servletene er lagt til for å gjøre appen suicidal slik at k8s restarter den
-         * TODO og den får nytt VAULT_TOKEN.
-         * TODO Slett disse når Aura fikser at VAULT_TOKEN er gyldig i mer enn 1 time.
-         * TODO Husk også å oppdatere i app-config.yaml
-         */
-        leggTilServlet(servletContext, IsAliveForAWhileServlet.class, "/internal/isAliveForAWhile");
-        leggTilServlet(servletContext, IsReadyForAWhileServlet.class, "/internal/isReadyForAWhile");
-
         migrateDatabase(adminDataSource);
     }
 
