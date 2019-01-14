@@ -6,8 +6,10 @@ package no.nav.fo.veilarblest.domain;
 
 import javax.annotation.Generated;
 
-import no.nav.fo.veilarblest.domain.tables.Lest;
-import no.nav.fo.veilarblest.domain.tables.records.LestRecord;
+import no.nav.fo.veilarblest.domain.tables.AndresRessurser;
+import no.nav.fo.veilarblest.domain.tables.MineRessurser;
+import no.nav.fo.veilarblest.domain.tables.records.AndresRessurserRecord;
+import no.nav.fo.veilarblest.domain.tables.records.MineRessurserRecord;
 
 import org.jooq.Identity;
 import org.jooq.UniqueKey;
@@ -32,13 +34,17 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
-    public static final Identity<LestRecord, Integer> IDENTITY_LEST = Identities0.IDENTITY_LEST;
+    public static final Identity<AndresRessurserRecord, Integer> IDENTITY_ANDRES_RESSURSER = Identities0.IDENTITY_ANDRES_RESSURSER;
+    public static final Identity<MineRessurserRecord, Integer> IDENTITY_MINE_RESSURSER = Identities0.IDENTITY_MINE_RESSURSER;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<LestRecord> LEST_PKEY = UniqueKeys0.LEST_PKEY;
+    public static final UniqueKey<AndresRessurserRecord> LEST_PKEY = UniqueKeys0.LEST_PKEY;
+    public static final UniqueKey<AndresRessurserRecord> ANDRES_UNIKE_RESSURSER_LEST = UniqueKeys0.ANDRES_UNIKE_RESSURSER_LEST;
+    public static final UniqueKey<MineRessurserRecord> MINE_RESSURSER_PKEY = UniqueKeys0.MINE_RESSURSER_PKEY;
+    public static final UniqueKey<MineRessurserRecord> MINE_UNIKE_RESSURSER_LEST = UniqueKeys0.MINE_UNIKE_RESSURSER_LEST;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -50,10 +56,14 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     private static class Identities0 {
-        public static Identity<LestRecord, Integer> IDENTITY_LEST = Internal.createIdentity(Lest.LEST, Lest.LEST.ID);
+        public static Identity<AndresRessurserRecord, Integer> IDENTITY_ANDRES_RESSURSER = Internal.createIdentity(AndresRessurser.ANDRES_RESSURSER, AndresRessurser.ANDRES_RESSURSER.ID);
+        public static Identity<MineRessurserRecord, Integer> IDENTITY_MINE_RESSURSER = Internal.createIdentity(MineRessurser.MINE_RESSURSER, MineRessurser.MINE_RESSURSER.ID);
     }
 
     private static class UniqueKeys0 {
-        public static final UniqueKey<LestRecord> LEST_PKEY = Internal.createUniqueKey(Lest.LEST, "lest_pkey", Lest.LEST.ID);
+        public static final UniqueKey<AndresRessurserRecord> LEST_PKEY = Internal.createUniqueKey(AndresRessurser.ANDRES_RESSURSER, "lest_pkey", AndresRessurser.ANDRES_RESSURSER.ID);
+        public static final UniqueKey<AndresRessurserRecord> ANDRES_UNIKE_RESSURSER_LEST = Internal.createUniqueKey(AndresRessurser.ANDRES_RESSURSER, "andres_unike_ressurser_lest", AndresRessurser.ANDRES_RESSURSER.LEST_AV, AndresRessurser.ANDRES_RESSURSER.EIER, AndresRessurser.ANDRES_RESSURSER.RESSURS);
+        public static final UniqueKey<MineRessurserRecord> MINE_RESSURSER_PKEY = Internal.createUniqueKey(MineRessurser.MINE_RESSURSER, "mine_ressurser_pkey", MineRessurser.MINE_RESSURSER.ID);
+        public static final UniqueKey<MineRessurserRecord> MINE_UNIKE_RESSURSER_LEST = Internal.createUniqueKey(MineRessurser.MINE_RESSURSER, "mine_unike_ressurser_lest", MineRessurser.MINE_RESSURSER.EIER, MineRessurser.MINE_RESSURSER.RESSURS);
     }
 }

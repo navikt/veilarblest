@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 public class LestDto {
-
-    public LocalDateTime lestTidspunkt;
-
+    public LocalDateTime tidspunkt;
+    public String ressurs;
+    public String verdi;
 }
