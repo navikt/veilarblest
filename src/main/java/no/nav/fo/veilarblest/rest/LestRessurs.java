@@ -64,6 +64,7 @@ public class LestRessurs {
 
     private void insertMinLestRessurs(String eier, Ressurs ressurs) {
         db.mergeInto(MINE_RESSURSER, MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS, MINE_RESSURSER.TIDSPUNKT)
+                .key(MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS)
                 .values(eier, ressurs, LocalDateTime.now())
                 .execute();
     }
