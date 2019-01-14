@@ -26,7 +26,9 @@ import org.jooq.Schema;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public enum Ressurs implements EnumType {
 
-    aktivitetsplan("aktivitetsplan");
+    aktivitetsplan("aktivitetsplan"),
+
+    informasjon("informasjon");
 
     private final String literal;
 

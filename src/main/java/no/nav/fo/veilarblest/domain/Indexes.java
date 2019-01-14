@@ -6,7 +6,8 @@ package no.nav.fo.veilarblest.domain;
 
 import javax.annotation.Generated;
 
-import no.nav.fo.veilarblest.domain.tables.Lest;
+import no.nav.fo.veilarblest.domain.tables.AndresRessurser;
+import no.nav.fo.veilarblest.domain.tables.MineRessurser;
 
 import org.jooq.Index;
 import org.jooq.OrderField;
@@ -30,13 +31,19 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
+    public static final Index ANDRES_UNIKE_RESSURSER_LEST = Indexes0.ANDRES_UNIKE_RESSURSER_LEST;
     public static final Index LEST_PKEY = Indexes0.LEST_PKEY;
+    public static final Index MINE_RESSURSER_PKEY = Indexes0.MINE_RESSURSER_PKEY;
+    public static final Index MINE_UNIKE_RESSURSER_LEST = Indexes0.MINE_UNIKE_RESSURSER_LEST;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
     // -------------------------------------------------------------------------
 
     private static class Indexes0 {
-        public static Index LEST_PKEY = Internal.createIndex("lest_pkey", Lest.LEST, new OrderField[] { Lest.LEST.ID }, true);
+        public static Index ANDRES_UNIKE_RESSURSER_LEST = Internal.createIndex("andres_unike_ressurser_lest", AndresRessurser.ANDRES_RESSURSER, new OrderField[] { AndresRessurser.ANDRES_RESSURSER.LEST_AV, AndresRessurser.ANDRES_RESSURSER.EIER, AndresRessurser.ANDRES_RESSURSER.RESSURS }, true);
+        public static Index LEST_PKEY = Internal.createIndex("lest_pkey", AndresRessurser.ANDRES_RESSURSER, new OrderField[] { AndresRessurser.ANDRES_RESSURSER.ID }, true);
+        public static Index MINE_RESSURSER_PKEY = Internal.createIndex("mine_ressurser_pkey", MineRessurser.MINE_RESSURSER, new OrderField[] { MineRessurser.MINE_RESSURSER.ID }, true);
+        public static Index MINE_UNIKE_RESSURSER_LEST = Internal.createIndex("mine_unike_ressurser_lest", MineRessurser.MINE_RESSURSER, new OrderField[] { MineRessurser.MINE_RESSURSER.EIER, MineRessurser.MINE_RESSURSER.RESSURS }, true);
     }
 }

@@ -2,72 +2,139 @@ package no.nav.fo.veilarblest.rest;
 
 import no.nav.brukerdialog.security.domain.IdentType;
 import no.nav.dialogarena.aktor.AktorService;
-import no.nav.fo.veilarblest.domain.tables.records.LestRecord;
+import no.nav.fo.veilarblest.domain.enums.Ressurs;
+import no.nav.fo.veilarblest.domain.tables.records.AndresRessurserRecord;
+import no.nav.fo.veilarblest.domain.tables.records.MineRessurserRecord;
 import no.nav.fo.veilarblest.rest.domain.LestDto;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static java.time.ZoneId.systemDefault;
 import static no.nav.brukerdialog.security.domain.IdentType.EksternBruker;
+import static no.nav.brukerdialog.security.domain.IdentType.InternBruker;
 import static no.nav.common.auth.SubjectHandler.getIdent;
 import static no.nav.common.auth.SubjectHandler.getIdentType;
 import static no.nav.fo.veilarblest.domain.enums.Ressurs.aktivitetsplan;
-import static no.nav.fo.veilarblest.domain.tables.Lest.LEST;
+import static no.nav.fo.veilarblest.domain.enums.Ressurs.informasjon;
+import static no.nav.fo.veilarblest.domain.tables.AndresRessurser.ANDRES_RESSURSER;
+import static no.nav.fo.veilarblest.domain.tables.MineRessurser.MINE_RESSURSER;
 import static org.jooq.impl.DSL.currentLocalDateTime;
 
 @Path("/")
 @Component
 public class LestRessurs {
 
-    @Inject
-    private DSLContext db;
+    private final DSLContext db;
+
+    private final AktorService aktorService;
 
     @Inject
-    private AktorService aktorService;
+    public LestRessurs(DSLContext db, AktorService aktorService) {
+        this.db = db;
+        this.aktorService = aktorService;
+    }
 
     @GET
     @Path("/aktivitetsplan/les")
-    public LestDto lesAktivitetsplan(@QueryParam("fnr") String fnr) {
+    public List<LestDto> lesAktivitetsplan(@QueryParam("fnr") String fnr) {
+        String currentUser = getBrukerId();
+        List<LestDto> mineRessurser = getMineLestRessurser(currentUser);
 
         IdentType identType = getIdentType().orElseThrow(RuntimeException::new);
+        if (EksternBruker.equals(identType)) {
+            insertMinLestRessurs(currentUser, aktivitetsplan);
+        } else if (InternBruker.equals(identType)) {
+            String eier = aktorService.getAktorId(fnr).orElseThrow(RuntimeException::new);
+            List<LestDto> andresLestRessurser = getAndresLestRessurser(eier, currentUser);
+            insertAndresLestRessurs(eier, currentUser, aktivitetsplan);
+            mineRessurser.addAll(andresLestRessurser);
+        }
 
-        String brukerId = getIdent().orElseThrow(RuntimeException::new);
-        String eier = identType.equals(EksternBruker) ? brukerId : fnr;
-        String aktorId = aktorService.getAktorId(eier).orElseThrow(RuntimeException::new);
+        return mineRessurser;
+    }
 
-        LestDto result = db.selectFrom(LEST)
-                .where(LEST.AV.eq(brukerId))
-                .and(LEST.EIER.eq(aktorId))
-                .and(LEST.RESSURS.eq(aktivitetsplan))
-                .orderBy(LEST.TIDSPUNKT.desc())
-                .limit(1)
-                .fetchOptional(this::map)
-                .orElse(initialLest());
 
-        db.insertInto(LEST)
-                .set(LEST.AV, brukerId)
-                .set(LEST.EIER, aktorId)
-                .set(LEST.RESSURS, aktivitetsplan)
-                .set(LEST.TIDSPUNKT, currentLocalDateTime())
+    private void insertMinLestRessurs(String eier, Ressurs ressurs) {
+        db.mergeInto(MINE_RESSURSER, MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS, MINE_RESSURSER.TIDSPUNKT)
+                .values(eier, ressurs, LocalDateTime.now())
                 .execute();
-
-        return result;
     }
 
-    private LestDto map(LestRecord record) {
-        return new LestDto()
-                .setLestTidspunkt(record.get(LEST.TIDSPUNKT));
+    private void insertAndresLestRessurs(String eier, String lestAv, Ressurs ressurs) {
+        db.mergeInto(
+                ANDRES_RESSURSER,
+                ANDRES_RESSURSER.EIER,
+                ANDRES_RESSURSER.LEST_AV,
+                ANDRES_RESSURSER.RESSURS,
+                ANDRES_RESSURSER.TIDSPUNKT
+        )
+                .key(ANDRES_RESSURSER.EIER, ANDRES_RESSURSER.LEST_AV, ANDRES_RESSURSER.RESSURS)
+                .values(eier, lestAv, ressurs, LocalDateTime.now())
+                .execute();
     }
 
-    private LestDto initialLest() {
+    private String getBrukerId() {
+        IdentType identType = getIdentType().orElseThrow(RuntimeException::new);
+        String brukerId = getIdent().orElseThrow(RuntimeException::new);
+        if (EksternBruker.equals(identType)) {
+            return aktorService.getAktorId(brukerId).orElseThrow(RuntimeException::new);
+        }
+        return brukerId;
+    }
+
+    private List<LestDto> getMineLestRessurser(String eier) {
+        return db.selectFrom(MINE_RESSURSER)
+                .where(MINE_RESSURSER.EIER.eq(eier))
+                .fetch()
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
+    }
+
+    private List<LestDto> getAndresLestRessurser(String eier, String lestAv) {
+        return db.selectFrom(ANDRES_RESSURSER)
+                .where(ANDRES_RESSURSER.EIER.eq(eier))
+                .and(ANDRES_RESSURSER.LEST_AV.eq(lestAv))
+                .fetch()
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
+    }
+
+    @PUT
+    @Path("/informasjon/les")
+    public void lesInformasjon(@QueryParam("versjon") String versjon) {
+        String brukerId = getBrukerId();
+        db.mergeInto(MINE_RESSURSER,
+                MINE_RESSURSER.EIER,
+                MINE_RESSURSER.RESSURS,
+                MINE_RESSURSER.TIDSPUNKT,
+                MINE_RESSURSER.VERDI
+        )
+                .key(MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS)
+                .values(brukerId, informasjon, LocalDateTime.now(), versjon)
+                .execute();
+    }
+
+    private LestDto map(MineRessurserRecord record) {
         return new LestDto()
-                .setLestTidspunkt(Instant.EPOCH.atZone(systemDefault()).toLocalDateTime());
+                .setTidspunkt(record.get(MINE_RESSURSER.TIDSPUNKT))
+                .setVerdi(record.get(MINE_RESSURSER.VERDI))
+                .setRessurs(record.get(MINE_RESSURSER.RESSURS).getLiteral());
+    }
+
+    private LestDto map(AndresRessurserRecord record) {
+        return new LestDto()
+                .setTidspunkt(record.get(ANDRES_RESSURSER.TIDSPUNKT))
+                .setRessurs(record.get(ANDRES_RESSURSER.RESSURS).getLiteral());
     }
 
 }

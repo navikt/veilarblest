@@ -10,7 +10,8 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
-import no.nav.fo.veilarblest.domain.tables.Lest;
+import no.nav.fo.veilarblest.domain.tables.AndresRessurser;
+import no.nav.fo.veilarblest.domain.tables.MineRessurser;
 
 import org.jooq.Catalog;
 import org.jooq.Sequence;
@@ -31,7 +32,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 471419427;
+    private static final long serialVersionUID = -450115805;
 
     /**
      * The reference instance of <code>public</code>
@@ -39,9 +40,14 @@ public class Public extends SchemaImpl {
     public static final Public PUBLIC = new Public();
 
     /**
-     * The table <code>public.lest</code>.
+     * The table <code>public.andres_ressurser</code>.
      */
-    public final Lest LEST = no.nav.fo.veilarblest.domain.tables.Lest.LEST;
+    public final AndresRessurser ANDRES_RESSURSER = no.nav.fo.veilarblest.domain.tables.AndresRessurser.ANDRES_RESSURSER;
+
+    /**
+     * The table <code>public.mine_ressurser</code>.
+     */
+    public final MineRessurser MINE_RESSURSER = no.nav.fo.veilarblest.domain.tables.MineRessurser.MINE_RESSURSER;
 
     /**
      * No further instances allowed
@@ -68,7 +74,8 @@ public class Public extends SchemaImpl {
 
     private final List<Sequence<?>> getSequences0() {
         return Arrays.<Sequence<?>>asList(
-            Sequences.LEST_ID_SEQ);
+            Sequences.LEST_ID_SEQ,
+            Sequences.MINE_RESSURSER_ID_SEQ);
     }
 
     @Override
@@ -80,6 +87,7 @@ public class Public extends SchemaImpl {
 
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
-            Lest.LEST);
+            AndresRessurser.ANDRES_RESSURSER,
+            MineRessurser.MINE_RESSURSER);
     }
 }

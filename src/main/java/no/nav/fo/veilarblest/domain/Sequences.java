@@ -27,4 +27,9 @@ public class Sequences {
      * The sequence <code>public.lest_id_seq</code>
      */
     public static final Sequence<Integer> LEST_ID_SEQ = new SequenceImpl<Integer>("lest_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.INTEGER.nullable(false));
+
+    /**
+     * The sequence <code>public.mine_ressurser_id_seq</code>
+     */
+    public static final Sequence<Integer> MINE_RESSURSER_ID_SEQ = new SequenceImpl<Integer>("mine_ressurser_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.INTEGER.nullable(false));
 }

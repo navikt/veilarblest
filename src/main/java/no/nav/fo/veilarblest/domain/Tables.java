@@ -6,7 +6,8 @@ package no.nav.fo.veilarblest.domain;
 
 import javax.annotation.Generated;
 
-import no.nav.fo.veilarblest.domain.tables.Lest;
+import no.nav.fo.veilarblest.domain.tables.AndresRessurser;
+import no.nav.fo.veilarblest.domain.tables.MineRessurser;
 
 
 /**
@@ -23,7 +24,12 @@ import no.nav.fo.veilarblest.domain.tables.Lest;
 public class Tables {
 
     /**
-     * The table <code>public.lest</code>.
+     * The table <code>public.andres_ressurser</code>.
      */
-    public static final Lest LEST = no.nav.fo.veilarblest.domain.tables.Lest.LEST;
+    public static final AndresRessurser ANDRES_RESSURSER = no.nav.fo.veilarblest.domain.tables.AndresRessurser.ANDRES_RESSURSER;
+
+    /**
+     * The table <code>public.mine_ressurser</code>.
+     */
+    public static final MineRessurser MINE_RESSURSER = no.nav.fo.veilarblest.domain.tables.MineRessurser.MINE_RESSURSER;
 }
