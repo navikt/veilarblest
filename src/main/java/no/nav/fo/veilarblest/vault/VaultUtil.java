@@ -97,7 +97,11 @@ public class VaultUtil {
                     }
                 }
             }
+            logger.info("Starting a refresh timer on the vault token (TTL = " + lookupSelf.getTTL() + " seconds");
             timer.schedule(new RefreshTokenTask(), suggestedRefreshInterval(lookupSelf.getTTL() * 1000));
+        }
+        else {
+            logger.warn("Vault token is not renewable");
         }
     }
 
