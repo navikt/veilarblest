@@ -89,8 +89,9 @@ public class VaultUtil {
                 @Override
                 public void run() {
                     try {
-                        logger.info("Refreshing Vault token (TTL = " + vault.auth().lookupSelf().getTTL() + " seconds)");
+                        logger.info("Refreshing Vault token (old TTL = " + vault.auth().lookupSelf().getTTL() + " seconds)");
                         AuthResponse response = vault.auth().renewSelf();
+                        logger.info("Refreshed Vault token (new TTL = " + vault.auth().lookupSelf().getTTL() + " seconds)");
                         timer.schedule(new RefreshTokenTask(), suggestedRefreshInterval(response.getAuthLeaseDuration() * 1000));
                     } catch (VaultException e) {
                         logger.error("Could not refresh the Vault token", e);
