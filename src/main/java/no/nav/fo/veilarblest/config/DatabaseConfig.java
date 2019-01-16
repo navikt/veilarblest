@@ -3,7 +3,9 @@ package no.nav.fo.veilarblest.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.SneakyThrows;
+import no.nav.apiapp.selftest.HelsesjekkMetadata;
 import no.nav.fo.veilarblest.vault.HikariCPVaultUtil;
+import no.nav.sbl.dialogarena.types.Pingable;
 import org.flywaydb.core.Flyway;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -64,5 +66,24 @@ public class DatabaseConfig {
                 ? String.join("-", APPLICATION_NAME, role)
                 : String.join("-", APPLICATION_NAME, requireEnvironmentName(), role);
     }
+
+
+    @Bean
+    public Pingable dbPinger(final DSLContext dslContext) {
+        HelsesjekkMetadata metadata = new HelsesjekkMetadata("db",
+                "Database: " + getRequiredProperty(VEILARBLEST_DB_URL_PROPERTY),
+                "Database for veilarblest",
+                true);
+
+        return () -> {
+            try {
+                dslContext.selectOne().fetch();
+                return Pingable.Ping.lyktes(metadata);
+            } catch (Exception e) {
+                return Pingable.Ping.feilet(metadata, e);
+            }
+        };
+    }
+
 
 }
