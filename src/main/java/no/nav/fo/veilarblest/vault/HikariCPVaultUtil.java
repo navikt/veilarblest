@@ -4,7 +4,6 @@ import com.bettercloud.vault.Vault;
 import com.bettercloud.vault.VaultException;
 import com.bettercloud.vault.response.LogicalResponse;
 import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariConfigMXBean;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +82,7 @@ public final class HikariCPVaultUtil {
         if (ds != null) {
             ds.setUsername(username);
             ds.setPassword(password);
+            ds.getHikariConfigMXBean().setUsername(username);
             ds.getHikariConfigMXBean().setPassword(password);
         }
 
