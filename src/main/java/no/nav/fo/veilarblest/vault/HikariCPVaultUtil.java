@@ -50,6 +50,10 @@ public final class HikariCPVaultUtil {
                     } else {
                         logger.error("Could not fetch database credentials for role \"" + role + "\"", e);
                     }
+
+                    // Lets try refreshing again
+                    logger.warn("Waiting 5 secs before trying to get new credentials");
+                    instance.getTimer().schedule(new RefreshDbCredentialsTask(), 5000);
                 }
             }
         }
@@ -59,7 +63,7 @@ public final class HikariCPVaultUtil {
             final RefreshResult refreshResult = hikariCPVaultUtil.refreshCredentialsAndReturnRefreshInterval();
             instance.getTimer().schedule(new RefreshDbCredentialsTask(), VaultUtil.suggestedRefreshInterval(refreshResult.leaseDuration * 1000));
         } catch (VaultException e) {
-            throw new VaultError("Could not fetch database credentials for role \"" + role + "\"", e);
+            throw new VaultError("Could not fetch initial database credentials for role \"" + role + "\"", e);
         }
 
         final HikariDataSource ds = new HikariDataSource(config);
