@@ -15,12 +15,12 @@ import static no.nav.brukerdialog.security.oidc.provider.AzureADB2CConfig.AZUREA
 import static no.nav.dialogarena.config.fasit.FasitUtils.*;
 import static no.nav.dialogarena.config.fasit.FasitUtils.Zone.FSS;
 import static no.nav.fo.veilarblest.config.ApplicationConfig.*;
-import static no.nav.fo.veilarblest.vault.VaultUtil.VAULT_TOKEN_PROPERTY;
 import static no.nav.sbl.dialogarena.common.cxf.StsSecurityConstants.*;
 import static no.nav.sbl.rest.RestUtils.LONG_READ_CONFIG;
 import static no.nav.sbl.util.EnvironmentUtils.Type.PUBLIC;
 import static no.nav.sbl.util.EnvironmentUtils.Type.SECRET;
 import static no.nav.sbl.util.EnvironmentUtils.setProperty;
+import static no.nav.vault.jdbc.hikaricp.VaultUtil.VAULT_TOKEN_PROPERTY;
 
 public class TestSetup {
 
