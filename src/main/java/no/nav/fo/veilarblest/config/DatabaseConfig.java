@@ -55,7 +55,6 @@ public class DatabaseConfig {
         config.setJdbcUrl(getRequiredProperty(VEILARBLEST_DB_URL_PROPERTY));
         config.setMaximumPoolSize(3);
         config.setMinimumIdle(1);
-        config.setMaxLifetime(60 * 1000 * 5); // 5 minutes max database connection TTL`
         String mountPath = getEnvironmentClass() == P
                 ? "postgresql/prod-fss"
                 : "postgresql/preprod-fss";
