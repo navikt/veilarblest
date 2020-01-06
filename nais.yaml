@@ -1,0 +1,51 @@
+kind: Application
+apiVersion: nais.io/v1alpha1
+metadata:
+  name: veilarblest
+  namespace: default
+  cluster: prod-fss
+  labels:
+    team: pto
+spec:
+  image: docker.pkg.github.com/navikt/veilarblest/veilarblest:{{version}}
+  ingresses:
+    - https://veilarblest.nais.adeo.no
+    - https://app.adeo.no/veilarblest
+  webproxy: true
+  port: 8080
+  prometheus:
+    enabled: true
+    path: veilarblest/internal/metrics
+  liveness:
+    path: veilarblest/internal/isAlive
+    port: 8080
+    initialDelay: 20
+  readiness:
+    path: veilarblest/internal/isReady
+    port: 8080
+    initialDelay: 20
+  replicas:
+    min: 2
+    max: 4
+    cpuThresholdPercentage: 50
+  resources:
+    limits:
+      cpu: "3"
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+  filesFrom:
+    - configmap: pto-config
+  vault:
+    enabled: true
+    paths:
+      - kvPath: /serviceuser/data/prod/srvveilarblest
+        mountPath: /var/run/secrets/nais.io/service_user
+      - kvPath: /kv/prod/fss/veilarblest/default
+        mountPath: /var/run/secrets/nais.io/vault
+  env:
+    - APPDYNAMICS_AGENT_ACCOUNT_NAME
+    - APPDYNAMICS_CONTROLLER_HOST_NAME
+    - APPDYNAMICS_CONTROLLER_PORT
+    - APPDYNAMICS_CONTROLLER_SSL_ENABLED
