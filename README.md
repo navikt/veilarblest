@@ -1,4 +1,6 @@
 # Veilarblest
+[![CircleCI](https://circleci.com/gh/navikt/veilarblest.svg?style=svg)](https://circleci.com/gh/navikt/veilarblest)
+
 
 Backendapplikasjon for aktivitetsplan. Tilbyr REST tjenester for å markere ressurser som lest, samt logg over når ressurser sist ble lest. 
 
