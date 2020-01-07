@@ -49,3 +49,5 @@ spec:
     - APPDYNAMICS_CONTROLLER_HOST_NAME
     - APPDYNAMICS_CONTROLLER_PORT
     - APPDYNAMICS_CONTROLLER_SSL_ENABLED
+    - name: VEILARBLEST_DB_URL
+      value: jdbc:postgresql://fsspgdb.adeo.no:5432/veilarblest
