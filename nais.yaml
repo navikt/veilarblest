@@ -42,6 +42,8 @@ spec:
     paths:
       - kvPath: /serviceuser/data/prod/srvveilarblest
         mountPath: /var/run/secrets/nais.io/service_user
+      - kvPath: /kv/prod/fss/veilarblest/default
+        mountPath: /var/run/secrets/nais.io/vault
   env:
     - APPDYNAMICS_AGENT_ACCOUNT_NAME
     - APPDYNAMICS_CONTROLLER_HOST_NAME
