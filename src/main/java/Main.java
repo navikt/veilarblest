@@ -47,6 +47,7 @@ public class Main {
                 "ISSO_ISALIVE_URL",
                 "VEILARBLOGIN_REDIRECT_URL_DESCRIPTION",
                 "VEILARBLOGIN_REDIRECT_URL_URL",
+                "AAD_B2C_DISCOVERY_URL",
                 "AKTOER_V2_SECURITYTOKEN",
                 "AKTOER_V2_ENDPOINTURL",
                 "AKTOER_V2_WSDLURL",
