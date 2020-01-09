@@ -15,8 +15,6 @@ import static no.nav.sbl.util.EnvironmentUtils.getRequiredProperty;
 public class Main {
 
     public static void main(String... args) {
-        readFromConfigMap();
-
         NaisUtils.Credentials serviceUser = getCredentials("service_user");
 
         //ABAC
@@ -37,23 +35,4 @@ public class Main {
         setProperty(OIDC_REDIRECT_URL_PROPERTY_NAME, getRequiredProperty(VEILARBLOGIN_REDIRECT_URL_URL_PROPERTY));
         ApiApp.runApp(ApplicationConfig.class, args);
     }
-
-    private static void readFromConfigMap() {
-        NaisUtils.addConfigMapToEnv("pto-config",
-                "SECURITYTOKENSERVICE_URL",
-                "ISSO_HOST_URL",
-                "ISSO_JWKS_URL",
-                "ISSO_ISSUER_URL",
-                "ISSO_ISALIVE_URL",
-                "VEILARBLOGIN_REDIRECT_URL_DESCRIPTION",
-                "VEILARBLOGIN_REDIRECT_URL_URL",
-                "AAD_B2C_DISCOVERY_URL",
-                "AKTOER_V2_SECURITYTOKEN",
-                "AKTOER_V2_ENDPOINTURL",
-                "AKTOER_V2_WSDLURL",
-                "LOGINSERVICE_OIDC_CALLBACKURI",
-                "LOGINSERVICE_OIDC_DISCOVERYURI"
-        );
-    }
-
 }
