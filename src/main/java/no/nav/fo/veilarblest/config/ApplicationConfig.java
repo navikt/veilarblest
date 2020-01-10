@@ -26,8 +26,7 @@ public class ApplicationConfig implements ApiApplication {
     public static final String APPLICATION_NAME = "veilarblest";
     public static final String AKTOER_V2_URL_PROPERTY = "AKTOER_V2_ENDPOINTURL";
     public static final String VEILARBLOGIN_REDIRECT_URL_URL_PROPERTY = "VEILARBLOGIN_REDIRECT_URL_URL";
-    public static final String AAD_B2C_CLIENTID_USERNAME_PROPERTY = "AAD_B2C_CLIENTID_USERNAME";
-    public static final String AAD_B2C_CLIENTID_PASSWORD_PROPERTY = "AAD_B2C_CLIENTID_PASSWORD";
+    public static final String SECURITYTOKENSERVICE_URL = "SECURITYTOKENSERVICE_URL";
 
     @Inject
     private DataSource adminDataSource;

@@ -1,0 +1,49 @@
+kind: Application
+apiVersion: nais.io/v1alpha1
+metadata:
+  name: veilarblest
+  namespace: {{namespace}}
+  cluster: dev-fss
+  labels:
+    team: pto
+spec:
+  image: docker.pkg.github.com/navikt/veilarblest/veilarblest:{{version}}
+  ingresses:
+    - https://veilarblest-{{namespace}}.nais.preprod.local
+    - https://app-{{namespace}}.adeo.no/veilarblest
+  webproxy: true
+  port: 8080
+  prometheus:
+    enabled: true
+    path: veilarblest/internal/metrics
+  liveness:
+    path: veilarblest/internal/isAlive
+    initialDelay: 20
+  readiness:
+    path: veilarblest/internal/isReady
+    initialDelay: 20
+  replicas:
+    min: 2
+    max: 4
+    cpuThresholdPercentage: 50
+  resources:
+    limits:
+      cpu: "2"
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 768Mi
+  envFrom:
+    - configmap: pto-config
+  vault:
+    enabled: true
+    paths:
+      - kvPath: /serviceuser/data/dev/srvveilarblest
+        mountPath: /var/run/secrets/nais.io/service_user
+      - kvPath: /kv/preprod/fss/veilarblest/{{namespace}}
+        mountPath: /var/run/secrets/nais.io/vault
+  env:
+    - name: VEILARBLEST_DB_URL
+      value: jdbc:postgresql://B27DBVL003.preprod.local:5432/veilarblest-{{namespace}}
+    - name: APP_ENVIRONMENT_NAME
+      value: {{namespace}}

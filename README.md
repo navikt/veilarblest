@@ -1,5 +1,4 @@
 # Veilarblest
-
 Backendapplikasjon for aktivitetsplan. Tilbyr REST tjenester for å markere ressurser som lest, samt logg over når ressurser sist ble lest. 
 
 ## Kjøre appen

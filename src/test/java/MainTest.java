@@ -4,7 +4,6 @@ import no.nav.testconfig.ApiAppTest;
 import org.slf4j.LoggerFactory;
 
 import static ch.qos.logback.classic.Level.DEBUG;
-import static no.nav.fo.veilarblest.TestSetup.setupEnvironment;
 import static no.nav.fo.veilarblest.config.ApplicationConfig.APPLICATION_NAME;
 import static no.nav.testconfig.ApiAppTest.Config.builder;
 
@@ -19,7 +18,6 @@ public class MainTest {
         Logger logger = loggerContext.getLogger("org.jooq");
         logger.setLevel(DEBUG);
 
-        setupEnvironment();
 
         Main.main(PORT);
     }
