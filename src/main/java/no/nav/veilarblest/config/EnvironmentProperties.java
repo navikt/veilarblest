@@ -37,8 +37,6 @@ public class EnvironmentProperties {
 
     private String kafkaBrokersUrl;
 
-    private String environmentClass;
-
     private String environmentName;
 
 }

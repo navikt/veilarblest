@@ -44,14 +44,14 @@ public class DatabaseConfig {
         config.setJdbcUrl(environmentProperties.getDbUrl());
         config.setMaximumPoolSize(3);
         config.setMinimumIdle(1);
-        String mountPath = environmentProperties.getEnvironmentClass().toLowerCase().equals("p")
+        String mountPath = environmentProperties.getEnvironmentName().toLowerCase().equals("p")
                 ? "postgresql/prod-fss"
                 : "postgresql/preprod-fss";
         return HikariCPVaultUtil.createHikariDataSourceWithVaultIntegration(config, mountPath, dbRole(user));
     }
 
     private String dbRole(String role) {
-        return environmentProperties.getEnvironmentClass().toLowerCase().equals("p")
+        return environmentProperties.getEnvironmentName().toLowerCase().equals("p")
                 ? String.join("-", APPLICATION_NAME, role)
                 : String.join("-", APPLICATION_NAME, environmentProperties.getEnvironmentName(), role);
     }
