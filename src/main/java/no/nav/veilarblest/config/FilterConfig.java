@@ -3,6 +3,7 @@ package no.nav.veilarblest.config;
 import no.nav.common.auth.oidc.filter.OidcAuthenticationFilter;
 import no.nav.common.auth.oidc.filter.OidcAuthenticatorConfig;
 import no.nav.common.auth.subject.IdentType;
+import no.nav.common.auth.utils.UserTokenFinder;
 import no.nav.common.log.LogFilter;
 import no.nav.common.rest.filter.SetStandardHttpHeadersFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -26,6 +27,7 @@ public class FilterConfig {
                 .withIdTokenCookieName(OPEN_AM_ID_TOKEN_COOKIE_NAME)
                 .withRefreshTokenCookieName(REFRESH_TOKEN_COOKIE_NAME)
                 .withRefreshUrl(environmentProperties.getOpenAmRefreshUrl())
+                .withIdTokenFinder(new UserTokenFinder())
                 .withIdentType(IdentType.InternBruker);
     }
 
@@ -46,6 +48,18 @@ public class FilterConfig {
     }
 
     @Bean
+    public FilterRegistrationBean pingFilter() {
+        // Veilarbproxy trenger dette endepunktet for å sjekke at tjenesten lever
+        // /internal kan ikke brukes siden det blir stoppet før det kommer frem
+
+        FilterRegistrationBean<PingFilter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(new PingFilter());
+        registration.setOrder(1);
+        registration.addUrlPatterns("/api/ping");
+        return registration;
+    }
+
+    @Bean
     public FilterRegistrationBean authenticationFilterRegistrationBean(EnvironmentProperties properties) {
         OidcAuthenticatorConfig openAmConfig = openAmAuthConfig(properties);
         OidcAuthenticatorConfig azureAdConfig = azureAdAuthConfig(properties);
@@ -57,7 +71,7 @@ public class FilterConfig {
         );
 
         registration.setFilter(authenticationFilter);
-        registration.setOrder(1);
+        registration.setOrder(2);
         registration.addUrlPatterns("/api/*");
         return registration;
     }
@@ -66,7 +80,7 @@ public class FilterConfig {
     public FilterRegistrationBean logFilterRegistrationBean() {
         FilterRegistrationBean<LogFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(new LogFilter(requireApplicationName(), isDevelopment().orElse(false)));
-        registration.setOrder(2);
+        registration.setOrder(3);
         registration.addUrlPatterns("/*");
         return registration;
     }
@@ -75,7 +89,7 @@ public class FilterConfig {
     public FilterRegistrationBean setStandardHeadersFilterRegistrationBean() {
         FilterRegistrationBean<SetStandardHttpHeadersFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(new SetStandardHttpHeadersFilter());
-        registration.setOrder(3);
+        registration.setOrder(4);
         registration.addUrlPatterns("/*");
         return registration;
     }
