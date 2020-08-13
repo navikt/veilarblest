@@ -15,7 +15,7 @@ spec:
   port: 8080
   prometheus:
     enabled: true
-    path: veilarblest/internal/metrics
+    path: veilarblest/internal/prometheus
   liveness:
     path: veilarblest/internal/isAlive
     initialDelay: 20

@@ -10,7 +10,7 @@ mvn clean install
 mvn test
 
 # starte
-# Kjør main-metoden i Main.java
+# Kjør main-metoden i no.nav.veilarblest.VeilarblestApp.java
 # For lokal test kjøring kjør MainTest.java
 ```
 
@@ -22,7 +22,7 @@ VEILARBLEST_DB_USER=<USERNAME>
 VEILARBLEST_DB_PASSWORD=<PASSWORD>
 ```
 For å sette opp en postgres database lokalt kan man bruke docker.
-```
+```sh
 docker run --name veilarblest -e POSTGRES_PASSWORD=<PASSWORD> -d -p 5432:5432 postgres
 docker ps (finn container id)
 docker exec -it <container_id> bash
