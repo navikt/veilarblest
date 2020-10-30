@@ -19,9 +19,9 @@ public class EnvironmentProperties {
 
     private String azureAdClientId;
 
-    private String azureAdB2cDiscoveryUrl;
+    private String loginserviceIdportenDiscoveryUrl;
 
-    private String azureAdB2cClientId;
+    private String loginserviceIdportenAudience;
 
     private String stsDiscoveryUrl;
 
