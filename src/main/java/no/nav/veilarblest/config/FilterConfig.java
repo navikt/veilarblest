@@ -42,7 +42,7 @@ public class FilterConfig {
     public OidcAuthenticatorConfig loginserviceIdportenConfig(EnvironmentProperties environmentProperties) {
         return new OidcAuthenticatorConfig()
                 .withDiscoveryUrl(environmentProperties.getLoginserviceIdportenDiscoveryUrl())
-                .withClientId(environmentProperties.getLoginserviceIdportenDiscoveryUrl())
+                .withClientId(environmentProperties.getLoginserviceIdportenAudience())
                 .withIdTokenCookieName(AZURE_AD_B2C_ID_TOKEN_COOKIE_NAME)
                 .withIdentType(IdentType.EksternBruker);
     }
