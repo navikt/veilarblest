@@ -39,19 +39,15 @@ public class InternalController {
     }
 
     @GetMapping("/isReady")
-    public void isReady() {
-        List<HealthCheck> healthChecks = List.of(
-                () -> checkDbHealth(dslContext)
-        );
-
-        HealthCheckUtils.findFirstFailingCheck(healthChecks)
-                .ifPresent((failedCheck) -> {
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-                });
-    }
+    public void isReady() { }
 
     @GetMapping("/isAlive")
-    public void isAlive() {}
+    public void isAlive() {
+        if(checkDbHealth(dslContext).isUnhealthy()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
 
     @GetMapping("/selftest")
     public ResponseEntity selftest() {
