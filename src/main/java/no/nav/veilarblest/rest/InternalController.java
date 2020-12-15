@@ -43,14 +43,10 @@ public class InternalController {
 
     @GetMapping("/isAlive")
     public void isAlive() {
-        List<HealthCheck> healthChecks = List.of(
-                () -> checkDbHealth(dslContext)
-        );
+        if(checkDbHealth(dslContext).isUnhealthy()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        HealthCheckUtils.findFirstFailingCheck(healthChecks)
-                .ifPresent((failedCheck) -> {
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-                });
+        }
     }
 
     @GetMapping("/selftest")
