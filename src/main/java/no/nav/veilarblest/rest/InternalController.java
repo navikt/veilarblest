@@ -39,7 +39,10 @@ public class InternalController {
     }
 
     @GetMapping("/isReady")
-    public void isReady() {
+    public void isReady() { }
+
+    @GetMapping("/isAlive")
+    public void isAlive() {
         List<HealthCheck> healthChecks = List.of(
                 () -> checkDbHealth(dslContext)
         );
@@ -49,9 +52,6 @@ public class InternalController {
                     throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
                 });
     }
-
-    @GetMapping("/isAlive")
-    public void isAlive() {}
 
     @GetMapping("/selftest")
     public ResponseEntity selftest() {
