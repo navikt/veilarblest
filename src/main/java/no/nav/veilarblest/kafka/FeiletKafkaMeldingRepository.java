@@ -1,7 +1,7 @@
 package no.nav.veilarblest.kafka;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +11,7 @@ import java.util.List;
 import static java.lang.String.format;
 
 @Repository
+@RequiredArgsConstructor
 public class FeiletKafkaMeldingRepository {
 
     public final static String FEILET_KAFKA_MELDING_TABLE               = "FEILET_KAFKA_MELDING";
@@ -20,11 +21,6 @@ public class FeiletKafkaMeldingRepository {
     private final static String JSON_PAYLOAD                            = "JSON_PAYLOAD";
 
     private final JdbcTemplate db;
-
-    @Autowired
-    public FeiletKafkaMeldingRepository(JdbcTemplate db) {
-        this.db = db;
-    }
 
     public void lagreFeiletKafkaMelding(String topicName, String messageKey, String payload) {
         String sql = format(

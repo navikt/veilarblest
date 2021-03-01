@@ -1,5 +1,6 @@
 package no.nav.veilarblest.rest;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.common.auth.subject.IdentType;
 import no.nav.common.auth.subject.SubjectHandler;
@@ -11,7 +12,6 @@ import no.nav.veilarblest.kafka.KafkaMessagePublisher;
 import no.nav.veilarblest.kafka.VeilederHarLestDTO;
 import no.nav.veilarblest.rest.domain.LestDto;
 import org.jooq.DSLContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,19 +33,12 @@ import static no.nav.veilarblest.domain.tables.MineRessurser.MINE_RESSURSER;
 @Slf4j
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class LestRessurs {
 
     private final DSLContext db;
-
     private final AktorregisterClient aktorregisterClient;
     private final KafkaMessagePublisher messagePublisher;
-
-    @Autowired
-    public LestRessurs(DSLContext db, AktorregisterClient aktorregisterClient, KafkaMessagePublisher messagePublisher) {
-        this.db = db;
-        this.aktorregisterClient = aktorregisterClient;
-        this.messagePublisher = messagePublisher;
-    }
 
     @GetMapping("/aktivitetsplan/les")
     public List<LestDto> lesAktivitetsplan(@QueryParam("fnr") String fnr) {

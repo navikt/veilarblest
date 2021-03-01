@@ -1,21 +1,16 @@
 package no.nav.veilarblest.kafka;
 
+import lombok.RequiredArgsConstructor;
 import no.nav.common.health.HealthCheck;
 import no.nav.common.health.HealthCheckResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class KafkaProducerHealthCheck implements HealthCheck {
-
     private final FeiletKafkaMeldingRepository feiletKafkaMeldingRepository;
-
-    @Autowired
-    public KafkaProducerHealthCheck(FeiletKafkaMeldingRepository feiletKafkaMeldingRepository) {
-        this.feiletKafkaMeldingRepository = feiletKafkaMeldingRepository;
-    }
 
     @Override
     public HealthCheckResult checkHealth() {

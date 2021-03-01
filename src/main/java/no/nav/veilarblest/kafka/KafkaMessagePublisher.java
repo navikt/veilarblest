@@ -1,7 +1,7 @@
 package no.nav.veilarblest.kafka;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
@@ -10,19 +10,11 @@ import static no.nav.common.json.JsonUtils.toJson;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class KafkaMessagePublisher {
     private final KafkaTopics kafkaTopics;
-
     private final KafkaTemplate<String, String> kafkaTemplate;
-
     private final FeiletKafkaMeldingRepository feiletKafkaMeldingRepository;
-
-    @Autowired
-    public KafkaMessagePublisher(KafkaTopics kafkaTopics, KafkaTemplate<String, String> kafkaTemplate, FeiletKafkaMeldingRepository feiletKafkaMeldingRepository) {
-        this.kafkaTopics = kafkaTopics;
-        this.kafkaTemplate = kafkaTemplate;
-        this.feiletKafkaMeldingRepository = feiletKafkaMeldingRepository;
-    }
 
     public void publiserVeilederHarLestAktivitetsplanen(VeilederHarLestDTO malEndringKafkaDTO) {
         publiser(kafkaTopics.getVeilederHarLestAktivitetsplanen(), malEndringKafkaDTO.getAktorId(), toJson(malEndringKafkaDTO));
