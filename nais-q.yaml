@@ -12,7 +12,7 @@ spec:
     - https://veilarblest-q1.nais.preprod.local
     - https://app-q1.adeo.no/veilarblest
     - https://app-q1.dev.adeo.no/veilarblest
-
+    - https://app.dev.adeo.no/veilarblest
   webproxy: true
   port: 8080
   prometheus:
