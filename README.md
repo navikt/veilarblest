@@ -29,3 +29,4 @@ docker exec -it <container_id> bash
 psql -U postgres
 CREATE DATABASE veilarblest;
 ```
+
