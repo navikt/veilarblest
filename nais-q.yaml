@@ -13,6 +13,7 @@ spec:
     - https://app-q1.adeo.no/veilarblest
     - https://app-q1.dev.adeo.no/veilarblest
     - https://app.dev.adeo.no/veilarblest
+    - https://veilarbpersonflate.intern.nav.no/veilarblest
   webproxy: true
   port: 8080
   prometheus:

@@ -11,6 +11,7 @@ spec:
   ingresses:
     - https://veilarblest.nais.adeo.no
     - https://app.adeo.no/veilarblest
+    - https://veilarbpersonflate.intern.nav.no/veilarblest
   webproxy: true
   port: 8080
   prometheus:
