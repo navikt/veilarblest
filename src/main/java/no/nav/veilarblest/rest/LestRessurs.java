@@ -3,7 +3,7 @@ package no.nav.veilarblest.rest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.common.auth.context.AuthContextHolder;
-import no.nav.common.client.aktorregister.AktorregisterClient;
+import no.nav.common.client.aktoroppslag.AktorOppslagClient;
 import no.nav.common.types.identer.Fnr;
 import no.nav.veilarblest.domain.enums.Ressurs;
 import no.nav.veilarblest.domain.tables.records.AndresRessurserRecord;
@@ -37,7 +37,7 @@ import static no.nav.veilarblest.domain.tables.MineRessurser.MINE_RESSURSER;
 public class LestRessurs {
 
     private final DSLContext db;
-    private final AktorregisterClient aktorregisterClient;
+    private final AktorOppslagClient aktorOppslagClient;
     private final KafkaMessagePublisher messagePublisher;
     private final AuthContextHolder authContextHolder;
 
@@ -53,7 +53,7 @@ public class LestRessurs {
         if (authContextHolder.erEksternBruker()) {
             insertMinLestRessurs(currentUser, aktivitetsplan, lestTidspunkt.toLocalDateTime());
         } else if (authContextHolder.erInternBruker()) {
-            String eier = aktorregisterClient.hentAktorId(Fnr.of(fnr)).toString();
+            String eier = aktorOppslagClient.hentAktorId(Fnr.of(fnr)).toString();
             List<LestDto> andresLestRessurser = getAndresLestRessurser(eier, currentUser);
             insertAndresLestRessurs(eier, currentUser, aktivitetsplan, lestTidspunkt.toLocalDateTime());
             mineRessurser.addAll(andresLestRessurser);
@@ -93,7 +93,7 @@ public class LestRessurs {
         if (authContextHolder.erEksternBruker()) {
             return authContextHolder.getUid()
                     .map(Fnr::of)
-                    .map(aktorregisterClient::hentAktorId)
+                    .map(aktorOppslagClient::hentAktorId)
                     .orElseThrow().get();
         }
         return authContextHolder.getUid()
