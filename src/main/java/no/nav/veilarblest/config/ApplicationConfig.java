@@ -1,12 +1,10 @@
 package no.nav.veilarblest.config;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.common.abac.Pep;
-import no.nav.common.abac.VeilarbPep;
-import no.nav.common.abac.audit.SpringAuditRequestInfoSupplier;
+import no.nav.common.client.aktoroppslag.AktorOppslagClient;
+import no.nav.common.client.aktoroppslag.AktorregisterHttpClient;
+import no.nav.common.client.aktoroppslag.CachedAktorOppslagClient;
 import no.nav.common.client.aktorregister.AktorregisterClient;
-import no.nav.common.client.aktorregister.AktorregisterHttpClient;
-import no.nav.common.client.aktorregister.CachedAktorregisterClient;
 import no.nav.common.sts.NaisSystemUserTokenProvider;
 import no.nav.common.sts.SystemUserTokenProvider;
 import no.nav.common.utils.Credentials;
@@ -36,10 +34,10 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public AktorregisterClient aktorregisterClient(EnvironmentProperties properties, SystemUserTokenProvider tokenProvider) {
+    public AktorOppslagClient aktorregisterClient(EnvironmentProperties properties, SystemUserTokenProvider tokenProvider) {
         AktorregisterClient aktorregisterClient = new AktorregisterHttpClient(
                 properties.getAktorregisterUrl(), APPLICATION_NAME, tokenProvider::getSystemUserToken
         );
-        return new CachedAktorregisterClient(aktorregisterClient);
+        return new CachedAktorOppslagClient(aktorregisterClient);
     }
 }
