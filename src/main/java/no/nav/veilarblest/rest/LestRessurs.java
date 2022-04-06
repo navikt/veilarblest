@@ -2,9 +2,9 @@ package no.nav.veilarblest.rest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.common.auth.subject.IdentType;
-import no.nav.common.auth.subject.SubjectHandler;
-import no.nav.common.client.aktorregister.AktorregisterClient;
+import no.nav.common.auth.context.AuthContextHolder;
+import no.nav.common.client.aktoroppslag.AktorOppslagClient;
+import no.nav.common.types.identer.Fnr;
 import no.nav.veilarblest.domain.enums.Ressurs;
 import no.nav.veilarblest.domain.tables.records.AndresRessurserRecord;
 import no.nav.veilarblest.domain.tables.records.MineRessurserRecord;
@@ -12,10 +12,12 @@ import no.nav.veilarblest.kafka.KafkaMessagePublisher;
 import no.nav.veilarblest.kafka.VeilederHarLestDTO;
 import no.nav.veilarblest.rest.domain.LestDto;
 import org.jooq.DSLContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.ws.rs.QueryParam;
 import java.time.LocalDateTime;
@@ -23,8 +25,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static no.nav.common.auth.subject.IdentType.EksternBruker;
-import static no.nav.common.auth.subject.IdentType.InternBruker;
 import static no.nav.veilarblest.domain.enums.Ressurs.aktivitetsplan;
 import static no.nav.veilarblest.domain.enums.Ressurs.informasjon;
 import static no.nav.veilarblest.domain.tables.AndresRessurser.ANDRES_RESSURSER;
@@ -37,20 +37,23 @@ import static no.nav.veilarblest.domain.tables.MineRessurser.MINE_RESSURSER;
 public class LestRessurs {
 
     private final DSLContext db;
-    private final AktorregisterClient aktorregisterClient;
+    private final AktorOppslagClient aktorOppslagClient;
     private final KafkaMessagePublisher messagePublisher;
+    private final AuthContextHolder authContextHolder;
 
     @GetMapping("/aktivitetsplan/les")
     public List<LestDto> lesAktivitetsplan(@QueryParam("fnr") String fnr) {
+        if (authContextHolder.erSystemBruker()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         String currentUser = getBrukerId();
         List<LestDto> mineRessurser = getMineLestRessurser(currentUser);
-        IdentType identType = SubjectHandler.getIdentType().orElseThrow(RuntimeException::new);
         ZonedDateTime lestTidspunkt = ZonedDateTime.now();
 
-        if (EksternBruker.equals(identType)) {
+        if (authContextHolder.erEksternBruker()) {
             insertMinLestRessurs(currentUser, aktivitetsplan, lestTidspunkt.toLocalDateTime());
-        } else if (InternBruker.equals(identType)) {
-            String eier = aktorregisterClient.hentAktorId(fnr);
+        } else if (authContextHolder.erInternBruker()) {
+            String eier = aktorOppslagClient.hentAktorId(Fnr.of(fnr)).toString();
             List<LestDto> andresLestRessurser = getAndresLestRessurser(eier, currentUser);
             insertAndresLestRessurs(eier, currentUser, aktivitetsplan, lestTidspunkt.toLocalDateTime());
             mineRessurser.addAll(andresLestRessurser);
@@ -87,12 +90,15 @@ public class LestRessurs {
     }
 
     private String getBrukerId() {
-        IdentType identType = SubjectHandler.getIdentType().orElseThrow(RuntimeException::new);
-        String brukerId = SubjectHandler.getIdent().orElseThrow(RuntimeException::new);
-        if (EksternBruker.equals(identType)) {
-            return aktorregisterClient.hentAktorId(brukerId);
+        if (authContextHolder.erEksternBruker()) {
+            return authContextHolder.getUid()
+                    .map(Fnr::of)
+                    .map(aktorOppslagClient::hentAktorId)
+                    .orElseThrow().get();
         }
-        return brukerId;
+        return authContextHolder.getUid()
+                .orElseThrow();
+
     }
 
     private List<LestDto> getMineLestRessurser(String eier) {
