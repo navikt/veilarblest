@@ -17,6 +17,8 @@ public class EnvironmentProperties {
 
     private String azureAdDiscoveryUrl;
 
+    private String azureAdLoginServiceClientId;
+
     private String azureAdClientId;
 
     private String loginserviceIdportenDiscoveryUrl;

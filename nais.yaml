@@ -51,3 +51,15 @@ spec:
       value: jdbc:postgresql://fsspgdb.adeo.no:5432/veilarblest
     - name: APP_ENVIRONMENT_NAME
       value: p
+  azure:
+    application:
+      enabled: true
+      claims:
+        extra:
+          - "NAVident"
+  accessPolicy:
+    inbound:
+      rules:
+        - application: veilarbpersonflate
+          namespace: poao
+          cluster: prod-gcp
