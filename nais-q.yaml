@@ -13,7 +13,7 @@ spec:
     - https://app-q1.adeo.no/veilarblest
     - https://app-q1.dev.adeo.no/veilarblest
     - https://app.dev.adeo.no/veilarblest
-    - https://veilarbpersonflate.dev.intern.nav.no/veilarblest
+    - https://veilarblest.dev-fss-pub.nais.io
   webproxy: true
   port: 8080
   prometheus:
@@ -51,3 +51,15 @@ spec:
       value: jdbc:postgresql://B27DBVL003.preprod.local:5432/veilarblest-q1
     - name: APP_ENVIRONMENT_NAME
       value: q1
+  azure:
+    application:
+      enabled: true
+      claims:
+        extra:
+          - "NAVident"
+  accessPolicy:
+    inbound:
+      rules:
+        - application: veilarbpersonflate
+          namespace: poao
+          cluster: dev-gcp
