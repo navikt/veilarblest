@@ -4,9 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.common.auth.context.AuthContextHolder;
 import no.nav.common.auth.context.AuthContextHolderThreadLocal;
 import no.nav.common.client.aktoroppslag.AktorOppslagClient;
-import no.nav.common.client.aktoroppslag.AktorregisterHttpClient;
 import no.nav.common.client.aktoroppslag.CachedAktorOppslagClient;
-import no.nav.common.client.aktorregister.AktorregisterClient;
+import no.nav.common.client.aktoroppslag.PdlAktorOppslagClient;
 import no.nav.common.sts.NaisSystemUserTokenProvider;
 import no.nav.common.sts.SystemUserTokenProvider;
 import no.nav.common.utils.Credentials;
@@ -16,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import static no.nav.common.utils.NaisUtils.getCredentials;
+import static no.nav.common.utils.UrlUtils.createServiceUrl;
 
 
 @Slf4j
@@ -42,9 +42,9 @@ public class ApplicationConfig {
 
     @Bean
     public AktorOppslagClient aktorregisterClient(EnvironmentProperties properties, SystemUserTokenProvider tokenProvider) {
-        AktorregisterClient aktorregisterClient = new AktorregisterHttpClient(
-                properties.getAktorregisterUrl(), APPLICATION_NAME, tokenProvider::getSystemUserToken
-        );
+        AktorOppslagClient aktorregisterClient = new PdlAktorOppslagClient(createServiceUrl("pdl-api", "pdl", false), tokenProvider::getSystemUserToken, tokenProvider::getSystemUserToken);
+
         return new CachedAktorOppslagClient(aktorregisterClient);
     }
+
 }
