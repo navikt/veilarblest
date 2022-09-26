@@ -17,7 +17,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <common.version>2.2022.05.05_06.41-84855089824b</common.version>
+        <common.version>2.2022.09.26_07.11-9c0037f021cb</common.version>
         <springfox.version>2.9.2</springfox.version>
         <!-- Override spring boot okhttp3.version-->
         <okhttp3.version>4.9.3</okhttp3.version>
@@ -115,6 +115,11 @@
         </dependency>
         <dependency>
             <groupId>no.nav.common</groupId>
+            <artifactId>token-client</artifactId>
+            <version>${common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.common</groupId>
             <artifactId>util</artifactId>
             <version>${common.version}</version>
         </dependency>
@@ -126,11 +131,6 @@
         <dependency>
             <groupId>no.nav.common</groupId>
             <artifactId>abac</artifactId>
-            <version>${common.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.common</groupId>
-            <artifactId>sts</artifactId>
             <version>${common.version}</version>
         </dependency>
         <dependency>
