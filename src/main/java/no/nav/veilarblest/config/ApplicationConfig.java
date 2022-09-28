@@ -4,18 +4,20 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.common.auth.context.AuthContextHolder;
 import no.nav.common.auth.context.AuthContextHolderThreadLocal;
 import no.nav.common.client.aktoroppslag.AktorOppslagClient;
-import no.nav.common.client.aktoroppslag.AktorregisterHttpClient;
 import no.nav.common.client.aktoroppslag.CachedAktorOppslagClient;
-import no.nav.common.client.aktorregister.AktorregisterClient;
-import no.nav.common.sts.NaisSystemUserTokenProvider;
-import no.nav.common.sts.SystemUserTokenProvider;
+import no.nav.common.client.aktoroppslag.PdlAktorOppslagClient;
+import no.nav.common.token_client.builder.AzureAdTokenClientBuilder;
+import no.nav.common.token_client.client.AzureAdMachineToMachineTokenClient;
+import no.nav.common.token_client.client.MachineToMachineTokenClient;
 import no.nav.common.utils.Credentials;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import static no.nav.common.utils.EnvironmentUtils.isProduction;
 import static no.nav.common.utils.NaisUtils.getCredentials;
+import static no.nav.common.utils.UrlUtils.createServiceUrl;
 
 
 @Slf4j
@@ -36,15 +38,21 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public SystemUserTokenProvider systemUserTokenProvider(EnvironmentProperties properties, Credentials serviceUserCredentials) {
-        return new NaisSystemUserTokenProvider(properties.getStsDiscoveryUrl(), serviceUserCredentials.username, serviceUserCredentials.password);
+    public AzureAdMachineToMachineTokenClient tokenClient() {
+        return AzureAdTokenClientBuilder.builder()
+                .withNaisDefaults()
+                .buildMachineToMachineTokenClient();
     }
 
     @Bean
-    public AktorOppslagClient aktorregisterClient(EnvironmentProperties properties, SystemUserTokenProvider tokenProvider) {
-        AktorregisterClient aktorregisterClient = new AktorregisterHttpClient(
-                properties.getAktorregisterUrl(), APPLICATION_NAME, tokenProvider::getSystemUserToken
+    public AktorOppslagClient aktorregisterClient(MachineToMachineTokenClient tokenClient) {
+        String tokenScop = String.format("api://%s-fss.pdl.pdl-api/.default",
+                isProduction().orElse(false) ? "prod" : "dev"
         );
-        return new CachedAktorOppslagClient(aktorregisterClient);
+        return new CachedAktorOppslagClient(new PdlAktorOppslagClient(
+                createServiceUrl("pdl-api", "pdl", false),
+                () -> tokenClient.createMachineToMachineToken(tokenScop))
+        );
     }
+
 }
