@@ -9,7 +9,7 @@ import static no.nav.common.kafka.producer.util.ProducerUtils.serializeJsonRecor
 
 @Service
 public class KafkaProducerService {
-    
+
     private final KafkaProducerRecordStorage producerRecordStorage;
 
     private final KafkaProperties kafkaProperties;
@@ -23,9 +23,9 @@ public class KafkaProducerService {
         this.kafkaProperties = kafkaProperties;
     }
 
-    public void publiserVeilederHarLestAktivitetPlanen(VeilederHarLestDTO malEndringKafkaDTO) {
-        store(kafkaProperties.getVeilederHarLestAktivitetsplanenTopicOnPrem(), malEndringKafkaDTO.getAktorId(), malEndringKafkaDTO);
-        store(kafkaProperties.getVeilederHarLestAkvititetsplanenTopicAiven(), malEndringKafkaDTO.getAktorId(), malEndringKafkaDTO);
+    public void publiserVeilederHarLestAktivitetPlanen(VeilederHarLestDTO veilederHarLestDTO) {
+        store(kafkaProperties.getVeilederHarLestAktivitetsplanenTopicOnPrem(), veilederHarLestDTO.getAktorId(), veilederHarLestDTO);
+        store(kafkaProperties.getVeilederHarLestAkvititetsplanenTopicAiven(), veilederHarLestDTO.getAktorId(), veilederHarLestDTO);
     }
 
 
