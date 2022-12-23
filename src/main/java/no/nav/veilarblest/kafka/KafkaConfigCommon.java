@@ -26,6 +26,7 @@ import static no.nav.common.kafka.util.KafkaPropertiesPreset.onPremDefaultProduc
 public class KafkaConfigCommon {
 
     public final static String PRODUCER_CLIENT_ID = "veilarblest-producer";
+    public final static String PRODUCER_AIVEN_CLIENT_ID = "veilarblest-aiven-producer";
 
     private final KafkaProducerRecordProcessor aivenProducerRecordProcessor;
 
@@ -60,7 +61,7 @@ public class KafkaConfigCommon {
         );
 
         KafkaProducerClient<byte[], byte[]> aivenProducerClient = KafkaProducerClientBuilder.<byte[], byte[]>builder()
-                .withProperties(aivenDefaultProducerProperties(PRODUCER_CLIENT_ID))
+                .withProperties(aivenDefaultProducerProperties(PRODUCER_AIVEN_CLIENT_ID))
                 .withMetrics(meterRegistry)
                 .build();
 
