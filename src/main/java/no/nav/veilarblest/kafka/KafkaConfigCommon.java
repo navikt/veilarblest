@@ -17,8 +17,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-import static no.nav.common.kafka.util.KafkaPropertiesPreset.aivenDefaultProducerProperties;
-import static no.nav.common.kafka.util.KafkaPropertiesPreset.onPremDefaultProducerProperties;
+import static no.nav.common.kafka.util.KafkaPropertiesPreset.aivenByteProducerProperties;
+import static no.nav.common.kafka.util.KafkaPropertiesPreset.onPremByteProducerProperties;
 
 
 @Configuration
@@ -47,7 +47,7 @@ public class KafkaConfigCommon {
         producerRecordStorage = new KafkaProducerRecordStorage(producerRepository);
 
         KafkaProducerClient<byte[], byte[]> onPremProducerClient = KafkaProducerClientBuilder.<byte[], byte[]>builder()
-                .withProperties(onPremDefaultProducerProperties(PRODUCER_CLIENT_ID, kafkaProperties.getKafkaBrokersUrl(), credentials))
+                .withProperties(onPremByteProducerProperties(PRODUCER_CLIENT_ID, kafkaProperties.getKafkaBrokersUrl(), credentials))
                 .withMetrics(meterRegistry)
                 .build();
 
@@ -61,7 +61,7 @@ public class KafkaConfigCommon {
         );
 
         KafkaProducerClient<byte[], byte[]> aivenProducerClient = KafkaProducerClientBuilder.<byte[], byte[]>builder()
-                .withProperties(aivenDefaultProducerProperties(PRODUCER_AIVEN_CLIENT_ID))
+                .withProperties(aivenByteProducerProperties(PRODUCER_AIVEN_CLIENT_ID))
                 .withMetrics(meterRegistry)
                 .build();
 
