@@ -8,7 +8,7 @@ import no.nav.common.types.identer.Fnr;
 import no.nav.veilarblest.domain.enums.Ressurs;
 import no.nav.veilarblest.domain.tables.records.AndresRessurserRecord;
 import no.nav.veilarblest.domain.tables.records.MineRessurserRecord;
-import no.nav.veilarblest.kafka.KafkaMessagePublisher;
+import no.nav.veilarblest.kafka.KafkaProducerService;
 import no.nav.veilarblest.kafka.VeilederHarLestDTO;
 import no.nav.veilarblest.rest.domain.LestDto;
 import org.jooq.DSLContext;
@@ -38,7 +38,7 @@ public class LestRessurs {
 
     private final DSLContext db;
     private final AktorOppslagClient aktorOppslagClient;
-    private final KafkaMessagePublisher messagePublisher;
+    private final KafkaProducerService kafkaProducerService;
     private final AuthContextHolder authContextHolder;
 
     @GetMapping("/aktivitetsplan/les")
@@ -58,7 +58,7 @@ public class LestRessurs {
             insertAndresLestRessurs(eier, currentUser, aktivitetsplan, lestTidspunkt.toLocalDateTime());
             mineRessurser.addAll(andresLestRessurser);
 
-            messagePublisher.publiserVeilederHarLestAktivitetsplanen(
+            kafkaProducerService.publiserVeilederHarLestAktivitetPlanen(
                     new VeilederHarLestDTO()
                             .setAktorId(eier)
                             .setVeilederId(currentUser)
@@ -78,12 +78,12 @@ public class LestRessurs {
 
     private void insertAndresLestRessurs(String eier, String lestAv, Ressurs ressurs, LocalDateTime lestTidspunkt) {
         db.mergeInto(
-                ANDRES_RESSURSER,
-                ANDRES_RESSURSER.EIER,
-                ANDRES_RESSURSER.LEST_AV,
-                ANDRES_RESSURSER.RESSURS,
-                ANDRES_RESSURSER.TIDSPUNKT
-        )
+                        ANDRES_RESSURSER,
+                        ANDRES_RESSURSER.EIER,
+                        ANDRES_RESSURSER.LEST_AV,
+                        ANDRES_RESSURSER.RESSURS,
+                        ANDRES_RESSURSER.TIDSPUNKT
+                )
                 .key(ANDRES_RESSURSER.EIER, ANDRES_RESSURSER.LEST_AV, ANDRES_RESSURSER.RESSURS)
                 .values(eier, lestAv, ressurs, lestTidspunkt)
                 .execute();
@@ -124,11 +124,11 @@ public class LestRessurs {
     public void lesInformasjon(@QueryParam("versjon") String versjon) {
         String brukerId = getBrukerId();
         db.mergeInto(MINE_RESSURSER,
-                MINE_RESSURSER.EIER,
-                MINE_RESSURSER.RESSURS,
-                MINE_RESSURSER.TIDSPUNKT,
-                MINE_RESSURSER.VERDI
-        )
+                        MINE_RESSURSER.EIER,
+                        MINE_RESSURSER.RESSURS,
+                        MINE_RESSURSER.TIDSPUNKT,
+                        MINE_RESSURSER.VERDI
+                )
                 .key(MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS)
                 .values(brukerId, informasjon, LocalDateTime.now(), versjon)
                 .execute();
