@@ -11,5 +11,4 @@ public class KafkaProperties {
     String kafkaBrokersUrl;
 
     String veilederHarLestAkvititetsplanenTopicAiven;
-    String veilederHarLestAktivitetsplanenTopicOnPrem;
 }

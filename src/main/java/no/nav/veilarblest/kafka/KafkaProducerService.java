@@ -28,7 +28,6 @@ public class KafkaProducerService {
 
     public void publiserVeilederHarLestAktivitetPlanen(VeilederHarLestDTO veilederHarLestDTO) {
         log.info(String.format("Publisere veileder har lest aktivitet planen med key %s", veilederHarLestDTO.getAktorId()));
-        store(kafkaProperties.getVeilederHarLestAktivitetsplanenTopicOnPrem(), veilederHarLestDTO.getAktorId(), toJson(veilederHarLestDTO));
         store(kafkaProperties.getVeilederHarLestAkvititetsplanenTopicAiven(), veilederHarLestDTO.getAktorId(), toJson(veilederHarLestDTO));
     }
 
