@@ -53,6 +53,8 @@ spec:
       value: jdbc:postgresql://B27DBVL003.preprod.local:5432/veilarblest-q1
     - name: APP_ENVIRONMENT_NAME
       value: q1
+  tokenx:
+    enabled: true
   azure:
     application:
       enabled: true
@@ -64,4 +66,7 @@ spec:
       rules:
         - application: veilarbpersonflate
           namespace: poao
+          cluster: dev-gcp
+        - application: aktivitetsplan
+          namespace: pto
           cluster: dev-gcp

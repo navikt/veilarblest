@@ -53,6 +53,8 @@ spec:
       value: jdbc:postgresql://fsspgdb.adeo.no:5432/veilarblest
     - name: APP_ENVIRONMENT_NAME
       value: p
+  tokenx:
+    enabled: true
   azure:
     application:
       enabled: true
@@ -64,4 +66,7 @@ spec:
       rules:
         - application: veilarbpersonflate
           namespace: poao
+          cluster: prod-gcp
+        - application: aktivitetsplan
+          namespace: pto
           cluster: prod-gcp
