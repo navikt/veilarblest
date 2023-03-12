@@ -5,11 +5,9 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.SneakyThrows;
 import no.nav.vault.jdbc.hikaricp.HikariCPVaultUtil;
 import org.flywaydb.core.Flyway;
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +17,7 @@ import static no.nav.veilarblest.config.ApplicationConfig.APPLICATION_NAME;
 
 @Configuration
 @EnableTransactionManagement
+@Profile("!local")
 public class DatabaseConfig {
 
     private final EnvironmentProperties environmentProperties;
@@ -30,11 +29,6 @@ public class DatabaseConfig {
     @Bean
     public DataSource dataSource() {
         return dataSource("user");
-    }
-
-    @Bean
-    public DSLContext dslContext(DataSource dataSource) {
-        return DSL.using(dataSource, SQLDialect.POSTGRES);
     }
 
 

@@ -7,8 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "app.kafka")
-public class KafkaProperties {
-    String kafkaBrokersUrl;
-
+public class VeilarblestTopicProps {
     String veilederHarLestAkvititetsplanenTopicAiven;
 }

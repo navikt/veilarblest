@@ -11,19 +11,21 @@ import no.nav.common.kafka.spring.PostgresJdbcTemplateProducerRepository;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Properties;
 
 import static no.nav.common.kafka.util.KafkaPropertiesPreset.aivenByteProducerProperties;
 
 
 @Configuration
-@EnableConfigurationProperties({KafkaProperties.class})
+@EnableConfigurationProperties({VeilarblestTopicProps.class})
 public class KafkaConfigCommon {
 
-    public final static String PRODUCER_AIVEN_CLIENT_ID = "veilarblest-aiven-producer";
+    public static final String PRODUCER_AIVEN_CLIENT_ID = "veilarblest-aiven-producer";
 
     private final KafkaProducerRecordProcessor aivenProducerRecordProcessor;
 
@@ -33,15 +35,16 @@ public class KafkaConfigCommon {
     public KafkaConfigCommon(
             LeaderElectionClient leaderElectionClient,
             JdbcTemplate jdbcTemplate,
-            KafkaProperties kafkaProperties,
-            MeterRegistry meterRegistry
+            VeilarblestTopicProps veilarblestTopicProps,
+            MeterRegistry meterRegistry,
+            Properties kafkaProperties
     ) {
         KafkaProducerRepository producerRepository = new PostgresJdbcTemplateProducerRepository(jdbcTemplate);
 
         producerRecordStorage = new KafkaProducerRecordStorage(producerRepository);
 
         KafkaProducerClient<byte[], byte[]> aivenProducerClient = KafkaProducerClientBuilder.<byte[], byte[]>builder()
-                .withProperties(aivenByteProducerProperties(PRODUCER_AIVEN_CLIENT_ID))
+                .withProperties(kafkaProperties)
                 .withMetrics(meterRegistry)
                 .build();
 
@@ -50,7 +53,7 @@ public class KafkaConfigCommon {
                 aivenProducerClient,
                 leaderElectionClient,
                 List.of(
-                        kafkaProperties.getVeilederHarLestAkvititetsplanenTopicAiven()
+                        veilarblestTopicProps.getVeilederHarLestAkvititetsplanenTopicAiven()
                 )
         );
     }
@@ -58,6 +61,12 @@ public class KafkaConfigCommon {
     @Bean
     public KafkaProducerRecordStorage producerRecordProcessor() {
         return producerRecordStorage;
+    }
+
+    @Bean
+    @Profile("!local")
+    public Properties kafkaProperties() {
+        return aivenByteProducerProperties(PRODUCER_AIVEN_CLIENT_ID);
     }
 
     @PostConstruct

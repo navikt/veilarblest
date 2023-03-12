@@ -17,6 +17,7 @@ import no.nav.common.utils.Credentials;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -38,11 +39,13 @@ public class ApplicationConfig {
     }
 
     @Bean
+    @Profile("!local")
     public Credentials serviceUserCredentials() {
         return getCredentials("service_user");
     }
 
     @Bean
+    @Profile("!local")
     public AzureAdMachineToMachineTokenClient tokenClient() {
         return AzureAdTokenClientBuilder.builder()
                 .withNaisDefaults()
@@ -50,6 +53,7 @@ public class ApplicationConfig {
     }
 
     @Bean
+    @Profile("!local")
     public AktorOppslagClient aktorregisterClient(MachineToMachineTokenClient tokenClient) {
         String tokenScop = String.format("api://%s-fss.pdl.pdl-api/.default",
                 isProduction().orElse(false) ? "prod" : "dev"

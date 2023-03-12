@@ -15,26 +15,26 @@ public class KafkaProducerService {
 
     private final KafkaProducerRecordStorage producerRecordStorage;
 
-    private final KafkaProperties kafkaProperties;
+    private final VeilarblestTopicProps veilarblestTopicProps;
 
     @Autowired
     public KafkaProducerService(
             KafkaProducerRecordStorage producerRecordStorage,
-            KafkaProperties kafkaProperties
+            VeilarblestTopicProps veilarblestTopicProps
     ) {
         this.producerRecordStorage = producerRecordStorage;
-        this.kafkaProperties = kafkaProperties;
+        this.veilarblestTopicProps = veilarblestTopicProps;
     }
 
     public void publiserVeilederHarLestAktivitetPlanen(VeilederHarLestDTO veilederHarLestDTO) {
         log.info(String.format("Publisere veileder har lest aktivitet planen med key %s", veilederHarLestDTO.getAktorId()));
-        store(kafkaProperties.getVeilederHarLestAkvititetsplanenTopicAiven(), veilederHarLestDTO.getAktorId(), toJson(veilederHarLestDTO));
+        store(veilarblestTopicProps.getVeilederHarLestAkvititetsplanenTopicAiven(), veilederHarLestDTO.getAktorId(), toJson(veilederHarLestDTO));
     }
 
 
     private void store(String topic, String key, String value) {
-        ProducerRecord<byte[], byte[]> record = serializeStringRecord(new ProducerRecord<>(topic, key, value));
-        producerRecordStorage.store(record);
+        ProducerRecord<byte[], byte[]> producerRecord = serializeStringRecord(new ProducerRecord<>(topic, key, value));
+        producerRecordStorage.store(producerRecord);
     }
 
 }
