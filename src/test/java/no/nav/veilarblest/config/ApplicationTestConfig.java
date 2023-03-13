@@ -19,7 +19,8 @@ import static org.mockito.Mockito.mock;
 @Import({
         DatabaseTestConfig.class,
         LestRessurs.class,
-        FilterTestConfig.class
+        FilterTestConfig.class,
+        KafkaTestConfig.class
 })
 public class ApplicationTestConfig {
 
