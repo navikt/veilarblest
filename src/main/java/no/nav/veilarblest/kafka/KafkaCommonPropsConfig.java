@@ -12,7 +12,7 @@ import static no.nav.veilarblest.kafka.KafkaConfigCommon.PRODUCER_AIVEN_CLIENT_I
 
 @Configuration
 @Profile("!local")
-public class KafkaCommonProps {
+public class KafkaCommonPropsConfig {
 
     @Bean
     @Qualifier("kafka")
