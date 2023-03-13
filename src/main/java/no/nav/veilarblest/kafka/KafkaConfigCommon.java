@@ -37,14 +37,14 @@ public class KafkaConfigCommon {
             JdbcTemplate jdbcTemplate,
             VeilarblestTopicProps veilarblestTopicProps,
             MeterRegistry meterRegistry,
-            Properties kafkaProperties
+            Properties kafkaCommonProps
     ) {
         KafkaProducerRepository producerRepository = new PostgresJdbcTemplateProducerRepository(jdbcTemplate);
 
         producerRecordStorage = new KafkaProducerRecordStorage(producerRepository);
 
         KafkaProducerClient<byte[], byte[]> aivenProducerClient = KafkaProducerClientBuilder.<byte[], byte[]>builder()
-                .withProperties(kafkaProperties)
+                .withProperties(kafkaCommonProps)
                 .withMetrics(meterRegistry)
                 .build();
 
@@ -65,7 +65,7 @@ public class KafkaConfigCommon {
 
     @Bean
     @Profile("!local")
-    public Properties kafkaProperties() {
+    public Properties kafkaCommonProps() {
         return aivenByteProducerProperties(PRODUCER_AIVEN_CLIENT_ID);
     }
 

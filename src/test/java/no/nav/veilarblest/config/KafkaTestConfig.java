@@ -14,7 +14,7 @@ import static no.nav.veilarblest.kafka.KafkaConfigCommon.PRODUCER_AIVEN_CLIENT_I
 @Configuration
 public class KafkaTestConfig {
     @Bean
-    public Properties kafkaProperties(EmbeddedKafkaBroker broker) {
+    public Properties kafkaCommonProps(EmbeddedKafkaBroker broker) {
         var kafkaProps = new Properties();
         kafkaProps.put(ProducerConfig.CLIENT_ID_CONFIG, PRODUCER_AIVEN_CLIENT_ID);
         kafkaProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, ByteArraySerializer.class);
