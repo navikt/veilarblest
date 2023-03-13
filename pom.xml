@@ -16,7 +16,7 @@
     <version>1</version>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <common.version>2.2022.09.26_07.11-9c0037f021cb</common.version>
         <springfox.version>2.9.2</springfox.version>
         <!-- Override spring boot okhttp3.version-->
@@ -79,11 +79,6 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>3.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>4.0.3</version>
         </dependency>
         <!--  Overskriv gammel avhengighet fra nimbus -->
         <dependency>
