@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 import no.nav.veilarblest.domain.tables.AndresRessurser;
 import no.nav.veilarblest.domain.tables.MineRessurser;

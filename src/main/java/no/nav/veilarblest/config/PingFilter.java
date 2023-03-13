@@ -2,9 +2,9 @@ package no.nav.veilarblest.config;
 
 import org.springframework.http.HttpStatus;
 
-import javax.servlet.FilterConfig;
-import javax.servlet.*;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class PingFilter implements Filter {
 

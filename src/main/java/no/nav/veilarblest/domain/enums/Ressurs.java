@@ -4,7 +4,7 @@
 package no.nav.veilarblest.domain.enums;
 
 
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 import no.nav.veilarblest.domain.Public;
 
