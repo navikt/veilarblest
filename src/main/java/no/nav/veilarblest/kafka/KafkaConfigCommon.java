@@ -13,15 +13,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Properties;
-
-import static no.nav.common.kafka.util.KafkaPropertiesPreset.aivenByteProducerProperties;
 
 
 @Configuration
@@ -35,20 +31,12 @@ public class KafkaConfigCommon {
 
     private final KafkaProducerRecordStorage producerRecordStorage;
 
-    @Bean
-    @Qualifier("kafka")
-    @Lazy
-    @Profile("!local")
-    public Properties kafkaCommonProps() {
-        return aivenByteProducerProperties(PRODUCER_AIVEN_CLIENT_ID);
-    }
-
     public KafkaConfigCommon(
             LeaderElectionClient leaderElectionClient,
             JdbcTemplate jdbcTemplate,
             VeilarblestTopicProps veilarblestTopicProps,
             MeterRegistry meterRegistry,
-            @Qualifier("kafka") @Lazy Properties kafkaCommonProps
+            @Qualifier("kafka") Properties kafkaCommonProps
     ) {
         log.info("**********  Setter opp kafka producer med properties : {}", kafkaCommonProps);
         KafkaProducerRepository producerRepository = new PostgresJdbcTemplateProducerRepository(jdbcTemplate);
