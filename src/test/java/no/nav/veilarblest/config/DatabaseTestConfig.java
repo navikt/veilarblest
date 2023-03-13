@@ -2,44 +2,34 @@ package no.nav.veilarblest.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
-import static no.nav.common.utils.EnvironmentUtils.getRequiredProperty;
-import static no.nav.veilarblest.JooqGenerator.*;
-
 @Configuration
+@Slf4j
 public class DatabaseTestConfig {
 
 
-    private final EnvironmentProperties environmentProperties;
-
-    public DatabaseTestConfig(EnvironmentProperties environmentProperties) {
-        this.environmentProperties = environmentProperties;
-    }
 
     @Bean
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(getRequiredProperty(VEILARBLEST_DB_URL_PROPERTY));
-        config.setUsername(getRequiredProperty(VEILARBLEST_DB_USER_PROPERTY));
-        config.setPassword(getRequiredProperty(VEILARBLEST_DB_PASSWORD_PROPERTY));
+        config.setJdbcUrl("jdbc:tc:postgresql:15.2:///veilarblest");
         config.setMaximumPoolSize(5);
+        HikariDataSource dataSource = new HikariDataSource(config);
+        migrateDatabase(dataSource);
 
-        return new HikariDataSource(config);
+        return dataSource;
     }
 
-    @PostConstruct
-    public void migrateDatabase() {
+    private void migrateDatabase(DataSource dataSource) {
         Flyway.configure()
-                .dataSource(dataSource())
+                .dataSource(dataSource)
                 .load()
                 .migrate();
     }
-
-
 }

@@ -11,7 +11,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 public class TestSubjectFilter implements Filter {
-    public static final String testIdent = "z123456";
+    public static final String testIdent = "Z123456";
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) {

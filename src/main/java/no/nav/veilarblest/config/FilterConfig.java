@@ -4,25 +4,28 @@ import no.nav.common.auth.context.UserRole;
 import no.nav.common.auth.oidc.filter.AzureAdUserRoleResolver;
 import no.nav.common.auth.oidc.filter.OidcAuthenticationFilter;
 import no.nav.common.auth.oidc.filter.OidcAuthenticatorConfig;
-import no.nav.common.auth.utils.UserTokenFinder;
 import no.nav.common.log.LogFilter;
 import no.nav.common.rest.filter.SetStandardHttpHeadersFilter;
 import no.nav.common.token_client.utils.env.TokenXEnvironmentvariables;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
 
-import static no.nav.common.auth.Constants.*;
+import static no.nav.common.auth.Constants.AZURE_AD_B2C_ID_TOKEN_COOKIE_NAME;
 import static no.nav.common.auth.oidc.filter.OidcAuthenticator.fromConfig;
 import static no.nav.common.utils.EnvironmentUtils.isDevelopment;
-import static no.nav.common.utils.EnvironmentUtils.requireApplicationName;
 
 @Configuration
 public class FilterConfig {
 
-    public OidcAuthenticatorConfig loginserviceIdportenConfig(EnvironmentProperties environmentProperties) {
+    @Value("${spring.application.name}")
+    private String applicationName;
+
+    private OidcAuthenticatorConfig loginserviceIdportenConfig(EnvironmentProperties environmentProperties) {
         return new OidcAuthenticatorConfig()
                 .withDiscoveryUrl(environmentProperties.getLoginserviceIdportenDiscoveryUrl())
                 .withClientId(environmentProperties.getLoginserviceIdportenAudience())
@@ -57,6 +60,11 @@ public class FilterConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(
+            value = "application.oidc.disabled",
+            havingValue = "false",
+            matchIfMissing = true
+    )
     public FilterRegistrationBean authenticationFilterRegistrationBean(EnvironmentProperties properties) {
         OidcAuthenticatorConfig azureAdB2cConfig = loginserviceIdportenConfig(properties);
         OidcAuthenticatorConfig naisAzureAdConfig = naisAzureAdConfig(properties);
@@ -79,7 +87,7 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean logFilterRegistrationBean() {
         FilterRegistrationBean<LogFilter> registration = new FilterRegistrationBean<>();
-        registration.setFilter(new LogFilter(requireApplicationName(), isDevelopment().orElse(false)));
+        registration.setFilter(new LogFilter(applicationName, isDevelopment().orElse(false)));
         registration.setOrder(3);
         registration.addUrlPatterns("/*");
         return registration;
