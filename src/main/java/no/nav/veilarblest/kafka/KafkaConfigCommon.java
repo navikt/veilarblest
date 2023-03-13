@@ -34,6 +34,12 @@ public class KafkaConfigCommon {
 
     private final KafkaProducerRecordStorage producerRecordStorage;
 
+    @Bean
+    @Qualifier("kafka")
+    @Profile("!local")
+    public Properties kafkaCommonProps() {
+        return aivenByteProducerProperties(PRODUCER_AIVEN_CLIENT_ID);
+    }
 
     public KafkaConfigCommon(
             LeaderElectionClient leaderElectionClient,
@@ -67,12 +73,7 @@ public class KafkaConfigCommon {
         return producerRecordStorage;
     }
 
-    @Bean
-    @Qualifier("kafka")
-    @Profile("!local")
-    public Properties kafkaCommonProps() {
-        return aivenByteProducerProperties(PRODUCER_AIVEN_CLIENT_ID);
-    }
+
 
     @PostConstruct
     public void start() {
