@@ -3,6 +3,7 @@ package no.nav.veilarblest.config;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.ByteArraySerializer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
@@ -14,6 +15,7 @@ import static no.nav.veilarblest.kafka.KafkaConfigCommon.PRODUCER_AIVEN_CLIENT_I
 @Configuration
 public class KafkaTestConfig {
     @Bean
+    @Qualifier("kafka")
     public Properties kafkaCommonProps(EmbeddedKafkaBroker broker) {
         var kafkaProps = new Properties();
         kafkaProps.put(ProducerConfig.CLIENT_ID_CONFIG, PRODUCER_AIVEN_CLIENT_ID);

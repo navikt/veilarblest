@@ -9,6 +9,7 @@ import no.nav.common.kafka.producer.feilhandtering.KafkaProducerRecordStorage;
 import no.nav.common.kafka.producer.feilhandtering.KafkaProducerRepository;
 import no.nav.common.kafka.producer.util.KafkaProducerClientBuilder;
 import no.nav.common.kafka.spring.PostgresJdbcTemplateProducerRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +40,7 @@ public class KafkaConfigCommon {
             JdbcTemplate jdbcTemplate,
             VeilarblestTopicProps veilarblestTopicProps,
             MeterRegistry meterRegistry,
-            Properties kafkaCommonProps
+            @Qualifier("kafka") Properties kafkaCommonProps
     ) {
         log.info("**********  Setter opp kafka producer med properties : {}", kafkaCommonProps);
         KafkaProducerRepository producerRepository = new PostgresJdbcTemplateProducerRepository(jdbcTemplate);
@@ -67,6 +68,7 @@ public class KafkaConfigCommon {
     }
 
     @Bean
+    @Qualifier("kafka")
     @Profile("!local")
     public Properties kafkaCommonProps() {
         return aivenByteProducerProperties(PRODUCER_AIVEN_CLIENT_ID);
