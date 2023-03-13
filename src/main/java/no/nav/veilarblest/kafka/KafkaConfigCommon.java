@@ -1,6 +1,7 @@
 package no.nav.veilarblest.kafka;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.common.job.leader_election.LeaderElectionClient;
 import no.nav.common.kafka.producer.KafkaProducerClient;
 import no.nav.common.kafka.producer.feilhandtering.KafkaProducerRecordProcessor;
@@ -23,6 +24,7 @@ import static no.nav.common.kafka.util.KafkaPropertiesPreset.aivenByteProducerPr
 
 @Configuration
 @EnableConfigurationProperties({VeilarblestTopicProps.class})
+@Slf4j
 public class KafkaConfigCommon {
 
     public static final String PRODUCER_AIVEN_CLIENT_ID = "veilarblest-aiven-producer";
@@ -39,6 +41,7 @@ public class KafkaConfigCommon {
             MeterRegistry meterRegistry,
             Properties kafkaCommonProps
     ) {
+        log.info("**********  Setter opp kafka producer med properties : {}", kafkaCommonProps);
         KafkaProducerRepository producerRepository = new PostgresJdbcTemplateProducerRepository(jdbcTemplate);
 
         producerRecordStorage = new KafkaProducerRecordStorage(producerRepository);
