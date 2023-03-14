@@ -156,11 +156,11 @@
             <optional>true</optional>
         </dependency>
 
-
+        <!-- Postgres - vault integrasjon for rotasjon av passord-->
         <dependency>
             <groupId>no.nav</groupId>
             <artifactId>vault-jdbc</artifactId>
-            <version>1.2.2</version>
+            <version>1.3.10</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -175,7 +175,7 @@
         <dependency>
             <groupId>com.bettercloud</groupId>
             <artifactId>vault-java-driver</artifactId>
-            <version>3.1.0</version>
+            <version>5.1.0</version>
         </dependency>
 
         <!-- Database -->
