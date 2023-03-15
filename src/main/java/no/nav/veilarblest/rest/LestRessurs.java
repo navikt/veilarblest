@@ -70,23 +70,34 @@ public class LestRessurs {
     }
 
     private void insertMinLestRessurs(String eier, Ressurs ressurs, LocalDateTime lestTidspunkt) {
-        db.mergeInto(MINE_RESSURSER, MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS, MINE_RESSURSER.TIDSPUNKT)
-                .key(MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS)
-                .values(eier, ressurs, lestTidspunkt)
-                .execute();
+
+        MineRessurserRecord nyRecord = new MineRessurserRecord();
+        nyRecord.setEier(eier);
+        nyRecord.setRessurs(ressurs);
+        nyRecord.setTidspunkt(lestTidspunkt);
+
+        var upsert = db.insertInto(MINE_RESSURSER)
+                .set(nyRecord)
+                .onConflict(MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS)
+                .doUpdate()
+                .set(MINE_RESSURSER.TIDSPUNKT, nyRecord.getTidspunkt());
+        upsert.execute();
     }
 
     private void insertAndresLestRessurs(String eier, String lestAv, Ressurs ressurs, LocalDateTime lestTidspunkt) {
-        db.mergeInto(
-                        ANDRES_RESSURSER,
-                        ANDRES_RESSURSER.EIER,
-                        ANDRES_RESSURSER.LEST_AV,
-                        ANDRES_RESSURSER.RESSURS,
-                        ANDRES_RESSURSER.TIDSPUNKT
-                )
-                .key(ANDRES_RESSURSER.EIER, ANDRES_RESSURSER.LEST_AV, ANDRES_RESSURSER.RESSURS)
-                .values(eier, lestAv, ressurs, lestTidspunkt)
-                .execute();
+        AndresRessurserRecord nyRecord = db.newRecord(ANDRES_RESSURSER);
+        nyRecord.setEier(eier);
+        nyRecord.setLestAv(lestAv);
+        nyRecord.setRessurs(ressurs);
+        nyRecord.setTidspunkt(lestTidspunkt);
+
+        var upsert = db.insertInto(ANDRES_RESSURSER)
+                .set(nyRecord)
+                .onConflict(ANDRES_RESSURSER.EIER, ANDRES_RESSURSER.LEST_AV, ANDRES_RESSURSER.RESSURS)
+                .doUpdate()
+                .set(MINE_RESSURSER.TIDSPUNKT, nyRecord.getTidspunkt());
+
+        upsert.execute();
     }
 
     private String getBrukerId() {
@@ -123,28 +134,33 @@ public class LestRessurs {
     @PutMapping("/informasjon/les")
     public void lesInformasjon(@QueryParam("versjon") String versjon) {
         String brukerId = getBrukerId();
-        db.mergeInto(MINE_RESSURSER,
-                        MINE_RESSURSER.EIER,
-                        MINE_RESSURSER.RESSURS,
-                        MINE_RESSURSER.TIDSPUNKT,
-                        MINE_RESSURSER.VERDI
-                )
-                .key(MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS)
-                .values(brukerId, informasjon, LocalDateTime.now(), versjon)
-                .execute();
+
+        MineRessurserRecord nyRecord = db.newRecord(MINE_RESSURSER);
+        nyRecord.setEier(brukerId);
+        nyRecord.setRessurs(informasjon);
+        nyRecord.setTidspunkt(LocalDateTime.now());
+        nyRecord.setVerdi(versjon);
+
+        var upsert = db.insertInto(MINE_RESSURSER)
+                .set(nyRecord)
+                .onConflict(MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS)
+                .doUpdate()
+                .set(MINE_RESSURSER.TIDSPUNKT, nyRecord.getTidspunkt())
+                .set(MINE_RESSURSER.VERDI, nyRecord.getVerdi());
+        upsert.execute();
     }
 
-    private LestDto map(MineRessurserRecord record) {
+    private LestDto map(MineRessurserRecord mineRessurserRecord) {
         return new LestDto()
-                .setTidspunkt(record.get(MINE_RESSURSER.TIDSPUNKT))
-                .setVerdi(record.get(MINE_RESSURSER.VERDI))
-                .setRessurs(record.get(MINE_RESSURSER.RESSURS).getLiteral());
+                .setTidspunkt(mineRessurserRecord.get(MINE_RESSURSER.TIDSPUNKT))
+                .setVerdi(mineRessurserRecord.get(MINE_RESSURSER.VERDI))
+                .setRessurs(mineRessurserRecord.get(MINE_RESSURSER.RESSURS).getLiteral());
     }
 
-    private LestDto map(AndresRessurserRecord record) {
+    private LestDto map(AndresRessurserRecord andresRessurserRecord) {
         return new LestDto()
-                .setTidspunkt(record.get(ANDRES_RESSURSER.TIDSPUNKT))
-                .setRessurs(record.get(ANDRES_RESSURSER.RESSURS).getLiteral());
+                .setTidspunkt(andresRessurserRecord.get(ANDRES_RESSURSER.TIDSPUNKT))
+                .setRessurs(andresRessurserRecord.get(ANDRES_RESSURSER.RESSURS).getLiteral());
     }
 
 }
