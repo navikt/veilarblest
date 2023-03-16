@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 import no.nav.veilarblest.domain.Indexes;
 import no.nav.veilarblest.domain.Keys;

@@ -13,18 +13,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
-
 
 public class LestRessursITest extends SpringBootTestBase {
 
 
     KafkaConsumer<String, String> kafkaConsumer;
     private String kafkaGroupId;
-
-
 
     @BeforeEach
     public void setup() {
@@ -40,7 +38,7 @@ public class LestRessursITest extends SpringBootTestBase {
     }
 
     @Test
-    public void kanari() {
+    void kanari() {
 
         RestAssured.given()
                 .port(port)
@@ -57,7 +55,7 @@ public class LestRessursITest extends SpringBootTestBase {
                 .jsonPath().getList(".", LestDto.class);
 
         Assertions.assertThat(lestDtos).hasSize(1);
-        ConsumerRecord<String, String> singleRecord = KafkaTestUtils.getSingleRecord(kafkaConsumer, "veileder-har-lest-aktivitetsplanen", 10000);
+        ConsumerRecord<String, String> singleRecord = KafkaTestUtils.getSingleRecord(kafkaConsumer, "veileder-har-lest-aktivitetsplanen", Duration.ofMillis(10000));
         Assertions.assertThat(singleRecord).isNotNull();
     }
 }

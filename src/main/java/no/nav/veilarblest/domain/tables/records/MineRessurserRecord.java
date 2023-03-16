@@ -6,7 +6,7 @@ package no.nav.veilarblest.domain.tables.records;
 
 import java.time.LocalDateTime;
 
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 import no.nav.veilarblest.domain.enums.Ressurs;
 import no.nav.veilarblest.domain.tables.MineRessurser;

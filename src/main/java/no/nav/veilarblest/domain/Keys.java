@@ -4,7 +4,7 @@
 package no.nav.veilarblest.domain;
 
 
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 import no.nav.veilarblest.domain.tables.AndresRessurser;
 import no.nav.veilarblest.domain.tables.MineRessurser;
