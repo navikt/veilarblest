@@ -44,7 +44,7 @@ public class LestRessursITest extends SpringBootTestBase {
                 .port(port)
                 .put("http://localhost/veilarblest/api/informasjon/les?versjon={versjon}", "versjon1")
                 .then()
-                .statusCode(200);
+                .statusCode(204);
         List<LestDto> lestDtos = RestAssured.given()
                 .port(port)
                 .get("http://localhost/veilarblest/api/aktivitetsplan/les?fnr={fnr}", "01010101010")
