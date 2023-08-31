@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
 
-import static no.nav.common.auth.Constants.AZURE_AD_B2C_ID_TOKEN_COOKIE_NAME;
 import static no.nav.common.auth.oidc.filter.OidcAuthenticator.fromConfig;
 import static no.nav.common.utils.EnvironmentUtils.isDevelopment;
 
@@ -24,14 +23,6 @@ public class FilterConfig {
 
     @Value("${spring.application.name}")
     private String applicationName;
-
-    private OidcAuthenticatorConfig loginserviceIdportenConfig(EnvironmentProperties environmentProperties) {
-        return new OidcAuthenticatorConfig()
-                .withDiscoveryUrl(environmentProperties.getLoginserviceIdportenDiscoveryUrl())
-                .withClientId(environmentProperties.getLoginserviceIdportenAudience())
-                .withIdTokenCookieName(AZURE_AD_B2C_ID_TOKEN_COOKIE_NAME)
-                .withUserRole(UserRole.EKSTERN);
-    }
 
     private OidcAuthenticatorConfig naisAzureAdConfig(EnvironmentProperties environmentProperties) {
         return new OidcAuthenticatorConfig()
@@ -66,13 +57,11 @@ public class FilterConfig {
             matchIfMissing = true
     )
     public FilterRegistrationBean authenticationFilterRegistrationBean(EnvironmentProperties properties) {
-        OidcAuthenticatorConfig azureAdB2cConfig = loginserviceIdportenConfig(properties);
         OidcAuthenticatorConfig naisAzureAdConfig = naisAzureAdConfig(properties);
 
         FilterRegistrationBean<OidcAuthenticationFilter> registration = new FilterRegistrationBean<>();
         OidcAuthenticationFilter authenticationFilter = new OidcAuthenticationFilter(
                 Arrays.asList(
-                        fromConfig(azureAdB2cConfig),
                         fromConfig(naisAzureAdConfig),
                         fromConfig(tokenxConfig())
                 )
