@@ -38,7 +38,6 @@ spec:
       memory: 1024Mi
   envFrom:
     - configmap: pto-config
-    - configmap: loginservice-idporten
   kafka:
     pool: nav-prod
   vault:
