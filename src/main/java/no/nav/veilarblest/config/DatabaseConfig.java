@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 public class DatabaseConfig {
-
+    private  DataSource dataSource;
     @Bean
     @SneakyThrows
     public DataSource dataSource(@Value("NAIS_DATABASE_VEILARBLEST_VEILARBLEST_URL") String urlWithCreds) {
@@ -24,12 +24,13 @@ public class DatabaseConfig {
         config.setJdbcUrl(urlWithCreds);
         config.setMaximumPoolSize(3);
         config.setMinimumIdle(1);
-        return new HikariDataSource(config);
+        dataSource = new HikariDataSource(config);
+        return  dataSource;
     }
 
 
     @PostConstruct
-    public void migrateDatabase(DataSource dataSource) {
+    public void migrateDatabase() {
         Flyway.configure()
                 .dataSource(dataSource)
                 .load()
