@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.SneakyThrows;
 import org.flywaydb.core.Flyway;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -16,17 +17,11 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class DatabaseConfig {
 
-    private final EnvironmentProperties environmentProperties;
-
-    public DatabaseConfig(EnvironmentProperties environmentProperties) {
-        this.environmentProperties = environmentProperties;
-    }
-
     @Bean
     @SneakyThrows
-    public DataSource dataSource() {
+    public DataSource dataSource(@Value("NAIS_DATABASE_VEILARBLEST_VEILARBLEST_URL") String urlWithCreds) {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(environmentProperties.getDbUrl());
+        config.setJdbcUrl(urlWithCreds);
         config.setMaximumPoolSize(3);
         config.setMinimumIdle(1);
         return new HikariDataSource(config);
@@ -34,13 +29,10 @@ public class DatabaseConfig {
 
 
     @PostConstruct
-    public void migrateDatabase() {
-        var dataSource = dataSource();
+    public void migrateDatabase(DataSource dataSource) {
         Flyway.configure()
                 .dataSource(dataSource)
                 .load()
                 .migrate();
     }
-
-
 }
