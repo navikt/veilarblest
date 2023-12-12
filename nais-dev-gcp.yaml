@@ -1,0 +1,51 @@
+kind: Application
+apiVersion: nais.io/v1alpha1
+metadata:
+  name: veilarblest
+  namespace: pto
+  cluster: dev-fss
+  labels:
+    team: pto
+spec:
+  image: ghcr.io/navikt/veilarblest/veilarblest:{{version}}
+  port: 8080
+  prometheus:
+    enabled: true
+    path: veilarblest/internal/prometheus
+  liveness:
+    path: veilarblest/internal/isAlive
+    initialDelay: 20
+  readiness:
+    path: veilarblest/internal/isReady
+    initialDelay: 20
+  replicas:
+    min: 2
+    max: 4
+    cpuThresholdPercentage: 50
+  resources:
+    limits:
+      cpu: "2"
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 768Mi
+  envFrom:
+    - configmap: pto-config
+  kafka:
+    pool: nav-dev
+  tokenx:
+    enabled: true
+  azure:
+    application:
+      enabled: true
+      allowAllUsers: true #todo burde vi legge inn noen roller her?
+      claims:
+        extra:
+          - "NAVident"
+  accessPolicy:
+    inbound:
+      rules:
+        - application: veilarbpersonflate
+          namespace: poao
+        - application: aktivitetsplan
+          namespace: pto
