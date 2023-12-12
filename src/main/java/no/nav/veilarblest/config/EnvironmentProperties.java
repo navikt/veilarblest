@@ -23,4 +23,7 @@ public class EnvironmentProperties {
     
     private String environmentName;
 
+    private String pdlScope;
+
+
 }
