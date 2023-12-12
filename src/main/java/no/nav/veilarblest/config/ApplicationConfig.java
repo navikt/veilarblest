@@ -13,6 +13,7 @@ import no.nav.common.job.leader_election.ShedLockLeaderElectionClient;
 import no.nav.common.token_client.builder.AzureAdTokenClientBuilder;
 import no.nav.common.token_client.client.AzureAdMachineToMachineTokenClient;
 import no.nav.common.token_client.client.MachineToMachineTokenClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,8 +31,6 @@ import static no.nav.common.utils.UrlUtils.createServiceUrl;
 @EnableScheduling
 @EnableConfigurationProperties({EnvironmentProperties.class})
 public class ApplicationConfig {
-    public static final String APPLICATION_NAME = "veilarblest";
-
     @Bean
     public AuthContextHolder authContextHolder() {
         return AuthContextHolderThreadLocal.instance();
@@ -41,21 +40,16 @@ public class ApplicationConfig {
     @Bean
     @Profile("!local")
     public AzureAdMachineToMachineTokenClient tokenClient() {
-        return AzureAdTokenClientBuilder.builder()
+        return AzureAdTokenClientBuilder
+                .builder()
                 .withNaisDefaults()
                 .buildMachineToMachineTokenClient();
     }
 
     @Bean
     @Profile("!local")
-    public AktorOppslagClient aktorregisterClient(MachineToMachineTokenClient tokenClient) {
-        String tokenScop = String.format("api://%s-fss.pdl.pdl-api/.default",
-                isProduction().orElse(false) ? "prod" : "dev"
-        );
-        return new CachedAktorOppslagClient(new PdlAktorOppslagClient(
-                createServiceUrl("pdl-api", "pdl", false),
-                () -> tokenClient.createMachineToMachineToken(tokenScop))
-        );
+    public AktorOppslagClient aktorregisterClient(MachineToMachineTokenClient tokenClient, @Value("") String pdlUrl, @Value("") String pdlScope) {
+        return new CachedAktorOppslagClient(new PdlAktorOppslagClient(pdlUrl, () -> tokenClient.createMachineToMachineToken(pdlScope)));
     }
 
     @Bean
