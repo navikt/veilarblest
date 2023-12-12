@@ -13,7 +13,6 @@ import no.nav.common.job.leader_election.ShedLockLeaderElectionClient;
 import no.nav.common.token_client.builder.AzureAdTokenClientBuilder;
 import no.nav.common.token_client.client.AzureAdMachineToMachineTokenClient;
 import no.nav.common.token_client.client.MachineToMachineTokenClient;
-import no.nav.common.utils.Credentials;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,11 +37,6 @@ public class ApplicationConfig {
         return AuthContextHolderThreadLocal.instance();
     }
 
-    @Bean
-    @Profile("!local")
-    public Credentials serviceUserCredentials() {
-        return getCredentials("service_user");
-    }
 
     @Bean
     @Profile("!local")

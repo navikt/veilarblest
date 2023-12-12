@@ -2,7 +2,6 @@ package no.nav.veilarblest.config;
 
 import no.nav.common.client.aktorregister.AktorregisterClient;
 import no.nav.common.token_client.client.AzureAdMachineToMachineTokenClient;
-import no.nav.common.utils.Credentials;
 import no.nav.veilarblest.mock.AktorregisterClientMock;
 import no.nav.veilarblest.rest.LestRessurs;
 import org.mockito.Mockito;
@@ -24,10 +23,6 @@ import static org.mockito.Mockito.mock;
 })
 public class ApplicationTestConfig {
 
-    @Bean
-    public Credentials serviceUserCredentials() {
-        return new Credentials("username", "password");
-    }
 
     @Bean
     public AktorregisterClient aktorregisterClient() {
