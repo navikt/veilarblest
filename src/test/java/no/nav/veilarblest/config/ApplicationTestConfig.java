@@ -16,7 +16,6 @@ import static org.mockito.Mockito.mock;
 @Configuration
 @EnableConfigurationProperties({EnvironmentProperties.class})
 @Import({
-        DatabaseTestConfig.class,
         LestRessurs.class,
         FilterTestConfig.class,
         KafkaTestConfig.class

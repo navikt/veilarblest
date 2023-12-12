@@ -3,17 +3,11 @@ apiVersion: nais.io/v1alpha1
 metadata:
   name: veilarblest
   namespace: pto
+  cluster: dev-fss
   labels:
     team: pto
 spec:
   image: {{ image }}
-  ingresses:
-    - https://veilarblest-q1.nais.preprod.local
-    - https://app-q1.adeo.no/veilarblest
-    - https://app-q1.dev.adeo.no/veilarblest
-    - https://app.dev.adeo.no/veilarblest
-    - https://veilarblest.dev-fss-pub.nais.io
-  webproxy: true
   port: 8080
   prometheus:
     enabled: true
@@ -39,18 +33,6 @@ spec:
     - configmap: pto-config
   kafka:
     pool: nav-dev
-  vault:
-    enabled: true
-    paths:
-      - kvPath: /serviceuser/data/dev/srvveilarblest
-        mountPath: /var/run/secrets/nais.io/service_user
-      - kvPath: /kv/preprod/fss/veilarblest/q1
-        mountPath: /var/run/secrets/nais.io/vault
-  env:
-    - name: VEILARBLEST_DB_URL
-      value: jdbc:postgresql://B27DBVL003.preprod.local:5432/veilarblest-q1
-    - name: APP_ENVIRONMENT_NAME
-      value: q1
   tokenx:
     enabled: true
   azure:
@@ -65,7 +47,5 @@ spec:
       rules:
         - application: veilarbpersonflate
           namespace: poao
-          cluster: dev-gcp
         - application: aktivitetsplan
           namespace: pto
-          cluster: dev-gcp
