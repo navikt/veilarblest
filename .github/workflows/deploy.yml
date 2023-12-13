@@ -9,12 +9,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  IMAGE_TAG: ${{ github.sha }}
-  IMAGE: ghcr.io/${{ github.repository }}/veilarblest
   PRINT_PAYLOAD: true
 
 jobs:
-  test-build-and-push:
+  build:
     name: Test, build and push
     runs-on: ubuntu-latest
     permissions:
@@ -69,7 +67,7 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-fss
           RESOURCE: nais.yaml
-          VAR: version=${{ env.IMAGE_TAG }}
+          VAR: image=${{ needs.build.outputs.image }}
 
   release-prod:
     name: Create prod release
