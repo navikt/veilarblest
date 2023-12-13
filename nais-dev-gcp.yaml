@@ -3,7 +3,6 @@ apiVersion: nais.io/v1alpha1
 metadata:
   name: veilarblest
   namespace: pto
-  cluster: dev-fss
   labels:
     team: pto
 spec:
@@ -35,10 +34,15 @@ spec:
     pool: nav-dev
   tokenx:
     enabled: true
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_15
+        databases:
+            - name: veilarblest
   azure:
     application:
       enabled: true
-      allowAllUsers: true #todo burde vi legge inn noen roller her?
+      allowAllUsers: true
       claims:
         extra:
           - "NAVident"
@@ -46,6 +50,4 @@ spec:
     inbound:
       rules:
         - application: veilarbpersonflate
-          namespace: poao
         - application: aktivitetsplan
-          namespace: pto

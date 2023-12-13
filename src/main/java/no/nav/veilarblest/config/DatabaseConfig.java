@@ -9,31 +9,38 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import jakarta.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 
 @Configuration
 @EnableTransactionManagement
 public class DatabaseConfig {
-    private  DataSource dataSource;
+
     @Bean
     @SneakyThrows
-    public DataSource dataSource(@Value("NAIS_DATABASE_VEILARBLEST_VEILARBLEST_URL") String urlWithCreds) {
+    public DataSource dataSource(
+            @Value("${db.host}") String host,
+            @Value("${db.port}") String port,
+            @Value("${db.database}") String database,
+            @Value("${db.username}") String username,
+            @Value("${db.password}") String password) {
+
+
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(urlWithCreds);
+        config.setJdbcUrl("jdbc:postgresql://" + host + ":" + port + "/" + database);
+        config.setUsername(username);
+        config.setPassword(password);
+
         config.setMaximumPoolSize(3);
         config.setMinimumIdle(1);
-        dataSource = new HikariDataSource(config);
-        return  dataSource;
-    }
 
+        HikariDataSource dataSource = new HikariDataSource(config);
 
-    @PostConstruct
-    public void migrateDatabase() {
         Flyway.configure()
                 .dataSource(dataSource)
                 .load()
                 .migrate();
+
+        return dataSource;
     }
 }
