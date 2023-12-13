@@ -32,6 +32,11 @@ spec:
     - configmap: pto-config
   kafka:
     pool: nav-dev
+  env:
+    - name: PDL_URL
+      value: https://pdl-api.dev-fss-pub.nais.io
+    - name: PDL_SCOPE
+      value: api://dev-fss.pdl.pdl-api/.default
   tokenx:
     enabled: true
   gcp:
