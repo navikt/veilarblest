@@ -55,4 +55,6 @@ spec:
     inbound:
       rules:
         - application: veilarbpersonflate
+          namespace: poao
         - application: aktivitetsplan
+          namespace: poao

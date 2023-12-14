@@ -7,11 +7,6 @@ metadata:
     team: pto
 spec:
   image: {{ image }}
-  ingresses:
-    - https://veilarblest.nais.adeo.no
-    - https://app.adeo.no/veilarblest
-    - https://veilarblest.prod-fss-pub.nais.io
-  webproxy: true
   port: 8080
   prometheus:
     enabled: true
@@ -39,20 +34,18 @@ spec:
     - configmap: pto-config
   kafka:
     pool: nav-prod
-  vault:
-    enabled: true
-    paths:
-      - kvPath: /serviceuser/data/prod/srvveilarblest
-        mountPath: /var/run/secrets/nais.io/service_user
-      - kvPath: /kv/prod/fss/veilarblest/default
-        mountPath: /var/run/secrets/nais.io/vault
   env:
-    - name: VEILARBLEST_DB_URL
-      value: jdbc:postgresql://fsspgdb.adeo.no:5432/veilarblest
-    - name: APP_ENVIRONMENT_NAME
-      value: p
+    - name: PDL_URL
+      value: https://pdl-api.prod-fss-pub.nais.io
+    - name: PDL_SCOPE
+      value: api://prod-fss.pdl.pdl-api/.default
   tokenx:
     enabled: true
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_15
+        databases:
+          - name: veilarblest
   azure:
     application:
       enabled: true
@@ -65,7 +58,5 @@ spec:
       rules:
         - application: veilarbpersonflate
           namespace: poao
-          cluster: prod-gcp
         - application: aktivitetsplan
           namespace: pto
-          cluster: prod-gcp

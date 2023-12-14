@@ -13,7 +13,7 @@ env:
   PRINT_PAYLOAD: true
 
 jobs:
-  test-build-and-push:
+  build:
     name: Test, build and push
     runs-on: ubuntu-latest
     permissions:
@@ -53,4 +53,4 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: nais-dev.yaml
-          VAR: image=${{ needs.test-build-and-push.outputs.image }}
+          VAR: image=${{ needs.build.outputs.image }}
