@@ -60,4 +60,4 @@ spec:
           namespace: poao
     outbound:
       external:
-        - host: https://pdl-api.dev-fss-pub.nais.io
+        - host: pdl-api.dev-fss-pub.nais.io
