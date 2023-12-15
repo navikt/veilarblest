@@ -42,7 +42,7 @@ jobs:
 
   deploy-dev:
     name: Deploy application to dev
-    needs: test-build-and-push
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
