@@ -28,8 +28,6 @@ spec:
     requests:
       cpu: 200m
       memory: 768Mi
-  envFrom:
-    - configmap: pto-config
   kafka:
     pool: nav-dev
   env:
