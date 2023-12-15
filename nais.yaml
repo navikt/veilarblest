@@ -30,8 +30,6 @@ spec:
     requests:
       cpu: "1"
       memory: 1024Mi
-  envFrom:
-    - configmap: pto-config
   kafka:
     pool: nav-prod
   env:
