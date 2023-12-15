@@ -39,7 +39,6 @@ public class LestRessursITest extends SpringBootTestBase {
 
     @Test
     void kanari() {
-
         RestAssured.given()
                 .port(port)
                 .put("http://localhost/veilarblest/api/informasjon/les?versjon={versjon}", "versjon1")

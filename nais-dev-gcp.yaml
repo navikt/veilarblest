@@ -2,10 +2,9 @@ kind: Application
 apiVersion: nais.io/v1alpha1
 metadata:
   name: veilarblest
-  namespace: pto
-  cluster: dev-fss
+  namespace: dab
   labels:
-    team: pto
+    team: dab
 spec:
   image: {{ image }}
   port: 8080
@@ -29,16 +28,24 @@ spec:
     requests:
       cpu: 200m
       memory: 768Mi
-  envFrom:
-    - configmap: pto-config
   kafka:
     pool: nav-dev
+  env:
+    - name: PDL_URL
+      value: https://pdl-api.dev-fss-pub.nais.io
+    - name: PDL_SCOPE
+      value: api://dev-fss.pdl.pdl-api/.default
   tokenx:
     enabled: true
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_15
+        databases:
+            - name: veilarblest
   azure:
     application:
       enabled: true
-      allowAllUsers: true #todo burde vi legge inn noen roller her?
+      allowAllUsers: true
       claims:
         extra:
           - "NAVident"
@@ -48,4 +55,7 @@ spec:
         - application: veilarbpersonflate
           namespace: poao
         - application: aktivitetsplan
-          namespace: pto
+          namespace: poao
+    outbound:
+      external:
+        - host: pdl-api.dev-fss-pub.nais.io

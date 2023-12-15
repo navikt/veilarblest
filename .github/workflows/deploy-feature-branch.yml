@@ -13,7 +13,7 @@ env:
   PRINT_PAYLOAD: true
 
 jobs:
-  test-build-and-push:
+  build:
     name: Test, build and push
     runs-on: ubuntu-latest
     permissions:
@@ -42,7 +42,7 @@ jobs:
 
   deploy-dev:
     name: Deploy application to dev
-    needs: test-build-and-push
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -50,7 +50,7 @@ jobs:
       - name: Deploy application
         uses: nais/deploy/actions/deploy@v1
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          APIKEY: ${{ secrets.DAB_NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: nais-dev.yaml
           VAR: image=${{ needs.build.outputs.image }}
