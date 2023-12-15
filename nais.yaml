@@ -60,3 +60,6 @@ spec:
           namespace: poao
         - application: aktivitetsplan
           namespace: pto
+    outbound:
+      external:
+        - host: https://pdl-api.prod-fss-pub.nais.io
