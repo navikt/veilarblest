@@ -48,7 +48,7 @@ public class ApplicationConfig {
 
     @Bean
     @Profile("!local")
-    public AktorOppslagClient aktorregisterClient(MachineToMachineTokenClient tokenClient, @Value("${app.pdl.url}") String pdlUrl, @Value("app.pdl.scope") String pdlScope) {
+    public AktorOppslagClient aktorregisterClient(MachineToMachineTokenClient tokenClient, @Value("${app.pdl.url}") String pdlUrl, @Value("${app.pdl.scope}") String pdlScope) {
         return new CachedAktorOppslagClient(new PdlAktorOppslagClient(pdlUrl, () -> tokenClient.createMachineToMachineToken(pdlScope)));
     }
 
