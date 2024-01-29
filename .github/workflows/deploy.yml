@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: # TODO: fjern etter migrering til gcp
 
 concurrency:
   group: deploy_prod
