@@ -55,7 +55,7 @@ spec:
         - application: veilarbpersonflate
           namespace: poao
         - application: aktivitetsplan
-          namespace: poao
+          namespace: pto
     outbound:
       external:
         - host: pdl-api.dev-fss-pub.nais.io
