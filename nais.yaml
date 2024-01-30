@@ -61,4 +61,4 @@ spec:
           namespace: pto
     outbound:
       external:
-        - host: https://pdl-api.prod-fss-pub.nais.io
+        - host: pdl-api.prod-fss-pub.nais.io
