@@ -53,7 +53,7 @@ jobs:
           APIKEY: ${{ secrets.DAB_NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: nais-dev.yaml
-          VAR: image=${{ needs.build.outputs.image }}
+          VAR: image=${{ needs.test-build-and-push.outputs.image }}
 
   deploy-prod:
     name: Deploy application to prod
@@ -68,7 +68,7 @@ jobs:
           APIKEY: ${{ secrets.DAB_NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: nais.yaml
-          VAR: image=${{ needs.build.outputs.image }}
+          VAR: image=${{ needs.test-build-and-push.outputs.image }}
 
   release-prod:
     name: Create prod release
