@@ -38,7 +38,6 @@ public class LestRessursITest extends SpringBootTestBase {
         kafkaConsumer.subscribe(List.of("veileder-har-lest-aktivitetsplanen"));
     }
 
-    @Disabled
     @Test
     void kanari() {
         RestAssured.given()
