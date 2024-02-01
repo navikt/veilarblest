@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
+import org.springframework.kafka.test.EmbeddedKafkaZKBroker;
 
 import java.util.Properties;
 
@@ -27,7 +28,7 @@ public class KafkaTestConfig {
 
     @Bean
     EmbeddedKafkaBroker embeddedKafka() {
-        return new EmbeddedKafkaBroker(1, true, 1);
+        return new EmbeddedKafkaZKBroker(1, true, 1);
     }
 
 }

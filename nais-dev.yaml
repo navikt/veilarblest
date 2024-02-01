@@ -2,18 +2,11 @@ kind: Application
 apiVersion: nais.io/v1alpha1
 metadata:
   name: veilarblest
-  namespace: pto
+  namespace: dab
   labels:
-    team: pto
+    team: dab
 spec:
   image: {{ image }}
-  ingresses:
-    - https://veilarblest-q1.nais.preprod.local
-    - https://app-q1.adeo.no/veilarblest
-    - https://app-q1.dev.adeo.no/veilarblest
-    - https://app.dev.adeo.no/veilarblest
-    - https://veilarblest.dev-fss-pub.nais.io
-  webproxy: true
   port: 8080
   prometheus:
     enabled: true
@@ -35,28 +28,24 @@ spec:
     requests:
       cpu: 200m
       memory: 768Mi
-  envFrom:
-    - configmap: pto-config
   kafka:
     pool: nav-dev
-  vault:
-    enabled: true
-    paths:
-      - kvPath: /serviceuser/data/dev/srvveilarblest
-        mountPath: /var/run/secrets/nais.io/service_user
-      - kvPath: /kv/preprod/fss/veilarblest/q1
-        mountPath: /var/run/secrets/nais.io/vault
   env:
-    - name: VEILARBLEST_DB_URL
-      value: jdbc:postgresql://B27DBVL003.preprod.local:5432/veilarblest-q1
-    - name: APP_ENVIRONMENT_NAME
-      value: q1
+    - name: PDL_URL
+      value: https://pdl-api.dev-fss-pub.nais.io
+    - name: PDL_SCOPE
+      value: api://dev-fss.pdl.pdl-api/.default
   tokenx:
     enabled: true
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_15
+        databases:
+            - name: veilarblest
   azure:
     application:
       enabled: true
-      allowAllUsers: true #todo burde vi legge inn noen roller her?
+      allowAllUsers: true
       claims:
         extra:
           - "NAVident"
@@ -65,7 +54,8 @@ spec:
       rules:
         - application: veilarbpersonflate
           namespace: poao
-          cluster: dev-gcp
         - application: aktivitetsplan
           namespace: pto
-          cluster: dev-gcp
+    outbound:
+      external:
+        - host: pdl-api.dev-fss-pub.nais.io

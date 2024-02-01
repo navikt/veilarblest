@@ -50,8 +50,8 @@ jobs:
       - name: Deploy application
         uses: nais/deploy/actions/deploy@v1
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-fss
+          APIKEY: ${{ secrets.DAB_NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
           RESOURCE: nais-dev.yaml
           VAR: image=${{ needs.test-build-and-push.outputs.image }}
 
@@ -65,8 +65,8 @@ jobs:
       - name: Deploy application
         uses: nais/deploy/actions/deploy@v1
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: prod-fss
+          APIKEY: ${{ secrets.DAB_NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
           RESOURCE: nais.yaml
           VAR: image=${{ needs.test-build-and-push.outputs.image }}
 
