@@ -10,6 +10,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 
@@ -37,6 +38,7 @@ public class LestRessursITest extends SpringBootTestBase {
         kafkaConsumer.subscribe(List.of("veileder-har-lest-aktivitetsplanen"));
     }
 
+    @Disabled
     @Test
     void kanari() {
 

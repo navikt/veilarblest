@@ -52,19 +52,19 @@ public class LestRessurs {
         ZonedDateTime lestTidspunkt = ZonedDateTime.now();
 
         if (authContextHolder.erEksternBruker()) {
-            insertMinLestRessurs(currentUser, aktivitetsplan, lestTidspunkt.toLocalDateTime());
+//            insertMinLestRessurs(currentUser, aktivitetsplan, lestTidspunkt.toLocalDateTime());
         } else if (authContextHolder.erInternBruker()) {
             String eier = aktorOppslagClient.hentAktorId(Fnr.of(fnr)).toString();
             List<LestDto> andresLestRessurser = getAndresLestRessurser(eier, currentUser);
-            insertAndresLestRessurs(eier, currentUser, aktivitetsplan, lestTidspunkt.toLocalDateTime());
+//            insertAndresLestRessurs(eier, currentUser, aktivitetsplan, lestTidspunkt.toLocalDateTime());
             mineRessurser.addAll(andresLestRessurser);
 
-            kafkaProducerService.publiserVeilederHarLestAktivitetPlanen(
-                    new VeilederHarLestDTO()
-                            .setAktorId(eier)
-                            .setVeilederId(currentUser)
-                            .setHarLestTidspunkt(lestTidspunkt)
-            );
+//            kafkaProducerService.publiserVeilederHarLestAktivitetPlanen(
+//                    new VeilederHarLestDTO()
+//                            .setAktorId(eier)
+//                            .setVeilederId(currentUser)
+//                            .setHarLestTidspunkt(lestTidspunkt)
+//            );
         }
 
         return mineRessurser;
@@ -135,21 +135,21 @@ public class LestRessurs {
     @PutMapping("/informasjon/les")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void lesInformasjon(@QueryParam("versjon") String versjon) {
-        String brukerId = getBrukerId();
-
-        MineRessurserRecord nyRecord = db.newRecord(MINE_RESSURSER);
-        nyRecord.setEier(brukerId);
-        nyRecord.setRessurs(informasjon);
-        nyRecord.setTidspunkt(LocalDateTime.now());
-        nyRecord.setVerdi(versjon);
-
-        var upsert = db.insertInto(MINE_RESSURSER)
-                .set(nyRecord)
-                .onConflict(MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS)
-                .doUpdate()
-                .set(MINE_RESSURSER.TIDSPUNKT, nyRecord.getTidspunkt())
-                .set(MINE_RESSURSER.VERDI, nyRecord.getVerdi());
-        upsert.execute();
+//        String brukerId = getBrukerId();
+//
+//        MineRessurserRecord nyRecord = db.newRecord(MINE_RESSURSER);
+//        nyRecord.setEier(brukerId);
+//        nyRecord.setRessurs(informasjon);
+//        nyRecord.setTidspunkt(LocalDateTime.now());
+//        nyRecord.setVerdi(versjon);
+//
+//        var upsert = db.insertInto(MINE_RESSURSER)
+//                .set(nyRecord)
+//                .onConflict(MINE_RESSURSER.EIER, MINE_RESSURSER.RESSURS)
+//                .doUpdate()
+//                .set(MINE_RESSURSER.TIDSPUNKT, nyRecord.getTidspunkt())
+//                .set(MINE_RESSURSER.VERDI, nyRecord.getVerdi());
+//        upsert.execute();
     }
 
     private LestDto map(MineRessurserRecord mineRessurserRecord) {
