@@ -18,12 +18,6 @@ mvn test
 
 ## Database
 
-Database parameters med Vault:
-
-```
-vault read postgresql/preprod-fss/creds/veilarblest-q1-user
-```
-
 Postgres database:
 
 ```
