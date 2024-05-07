@@ -39,7 +39,7 @@ public class LestRessurs {
     private final KafkaProducerService kafkaProducerService;
     private final AuthContextHolder authContextHolder;
 
-    @PostMapping
+    @PostMapping("/aktivitetsplan/les")
     public List<LestDto> lesAktivitetsplanPost(@RequestBody(required = false) FnrDto fnrDto) {
         return lesAktivitetsplanIntern(fnrDto.getFnr());
     }
