@@ -41,7 +41,7 @@ public class LestRessurs {
 
     @PostMapping("/aktivitetsplan/les")
     public List<LestDto> lesAktivitetsplanPost(@RequestBody(required = false) FnrDto fnrDto) {
-        return lesAktivitetsplanIntern(fnrDto.getFnr());
+        return lesAktivitetsplanIntern(fnrDto.fnr());
     }
 
     @GetMapping("/aktivitetsplan/les")
