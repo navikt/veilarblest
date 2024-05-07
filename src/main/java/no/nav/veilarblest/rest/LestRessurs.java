@@ -10,14 +10,11 @@ import no.nav.veilarblest.domain.tables.records.AndresRessurserRecord;
 import no.nav.veilarblest.domain.tables.records.MineRessurserRecord;
 import no.nav.veilarblest.kafka.KafkaProducerService;
 import no.nav.veilarblest.kafka.VeilederHarLestDTO;
+import no.nav.veilarblest.rest.domain.FnrDto;
 import no.nav.veilarblest.rest.domain.LestDto;
 import org.jooq.DSLContext;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.ws.rs.QueryParam;
@@ -42,8 +39,17 @@ public class LestRessurs {
     private final KafkaProducerService kafkaProducerService;
     private final AuthContextHolder authContextHolder;
 
+    @PostMapping
+    public List<LestDto> lesAktivitetsplanPost(@RequestBody(required = false) FnrDto fnrDto) {
+        return lesAktivitetsplanIntern(fnrDto.getFnr());
+    }
+
     @GetMapping("/aktivitetsplan/les")
     public List<LestDto> lesAktivitetsplan(@QueryParam("fnr") String fnr) {
+        return lesAktivitetsplanIntern(fnr);
+    }
+
+    public List<LestDto> lesAktivitetsplanIntern(String fnr) {
         if (authContextHolder.erSystemBruker()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
