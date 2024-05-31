@@ -4,5 +4,4 @@
 
     <!-- Logger cookies dersom det ikke parses riktig. Dette kan fjernes i versjon 2.2020.10.13_14.48-80e4c2dc5856 av common eller nyere -->
     <logger name="org.apache.tomcat.util.http.parser.Cookie" level="OFF" />
-    <logger name="org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLogger" level="DEBUG" />
 </configuration>
