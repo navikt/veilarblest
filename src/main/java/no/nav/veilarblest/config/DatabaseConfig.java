@@ -35,11 +35,11 @@ public class DatabaseConfig {
         HikariDataSource dataSource;
 
         // Setter opp datasource i try/catch fordi hikari logger url som inneholder passord dersom det feiler
-        try {
-            dataSource = new HikariDataSource(config);
-        } catch(RuntimeException e) {
-            throw new RuntimeException("Kunne ikke sette opp hikari datasource");
-        }
+//        try {
+           dataSource = new HikariDataSource(config);
+//        } catch(RuntimeException e) {
+//            throw new RuntimeException("Kunne ikke sette opp hikari datasource");
+//        }
 
         Flyway.configure()
                 .dataSource(dataSource)
