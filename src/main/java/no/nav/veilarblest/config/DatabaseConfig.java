@@ -19,18 +19,15 @@ public class DatabaseConfig {
     @Bean
     @SneakyThrows
     public DataSource dataSource(
-            @Value("${db.host}") String host,
-            @Value("${db.port}") String port,
-            @Value("${db.database}") String database,
+            @Value("${db.url}") String url,
             @Value("${db.username}") String username,
             @Value("${db.password}") String password) {
 
 
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://" + host + ":" + port + "/" + database);
+        config.setJdbcUrl(url);
         config.setUsername(username);
         config.setPassword(password);
-
         config.setMaximumPoolSize(3);
         config.setMinimumIdle(1);
 

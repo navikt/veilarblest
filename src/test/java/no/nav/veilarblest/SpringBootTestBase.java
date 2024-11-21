@@ -29,7 +29,7 @@ public abstract class SpringBootTestBase {
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) throws SQLException {
-        registry.add("db.url", () ->  postgres.getJdbcUrl("postgres", "veilarblest"));
+        registry.add("db.url", () ->  postgres.getJdbcUrl("postgres", "postgres"));
         registry.add("db.username", () -> "postgres");
         registry.add("db.password", () -> "postgres");
     }
@@ -37,12 +37,6 @@ public abstract class SpringBootTestBase {
 
     @Autowired
     protected EmbeddedKafkaBroker kafkaBroker;
-
-    static {
-        System.setProperty("VEILARBLEST_DB_URL","jdbc:postgresql://localhost/veilarblest");
-        System.setProperty("VEILARBLEST_DB_USER","postgres");
-        System.setProperty("VEILARBLEST_DB_PASSWORD","1234");
-    }
 
     @LocalServerPort
     protected int port;
