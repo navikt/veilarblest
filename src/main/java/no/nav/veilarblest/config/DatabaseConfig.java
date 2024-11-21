@@ -30,8 +30,16 @@ public class DatabaseConfig {
         config.setPassword(password);
         config.setMaximumPoolSize(3);
         config.setMinimumIdle(1);
+        config.setDriverClassName("org.postgresql.Driver");
 
-        HikariDataSource dataSource = new HikariDataSource(config);
+        HikariDataSource dataSource;
+
+        // Setter opp datasource i try/catch fordi hikari logger url som inneholder passord dersom det feiler
+        try {
+            dataSource = new HikariDataSource(config);
+        } catch(RuntimeException e) {
+            throw new RuntimeException("Kunne ikke sette opp hikari datasource");
+        }
 
         Flyway.configure()
                 .dataSource(dataSource)
