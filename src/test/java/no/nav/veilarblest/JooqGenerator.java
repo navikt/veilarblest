@@ -13,7 +13,6 @@ public class JooqGenerator {
     public static final String VEILARBLEST_DB_USER_PROPERTY = "VEILARBLEST_DB_USER";
     public static final String VEILARBLEST_DB_PASSWORD_PROPERTY = "VEILARBLEST_DB_PASSWORD";
 
-
     public static void main(String[] args) throws Exception {
         String url = getRequiredProperty(VEILARBLEST_DB_URL_PROPERTY);
         String user = getRequiredProperty(VEILARBLEST_DB_USER_PROPERTY);
