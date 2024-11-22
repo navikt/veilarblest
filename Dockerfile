@@ -9,7 +9,7 @@ COPY --from=busybox /bin/chown /bin/chown
 
 ENV TZ="Europe/Oslo"
 WORKDIR /app
-COPY build/libs/veilarblest.jar ./
+COPY target/veilarblest.jar ./
 RUN /bin/mkdir /secure-logs
 RUN chown nonroot /secure-logs
 EXPOSE 8080
