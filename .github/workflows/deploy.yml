@@ -37,8 +37,6 @@ jobs:
         id: docker-build-push
         with:
           team: dab
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
       - name: Slack Notification (test failure)
         if: failure()
         uses: rtCamp/action-slack-notify@v2
