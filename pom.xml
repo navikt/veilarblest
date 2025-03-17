@@ -17,7 +17,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <common.version>3.2023.02.28_14.59-ff398ca0d33e</common.version>
+        <common.version>3.2025.03.06_11.40-cbc2a0783de9</common.version>
     </properties>
 
     <repositories>
