@@ -1,7 +1,7 @@
-FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/jre:openjdk-21
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/jre:openjdk-21 as jdk
 
-COPY --from=busybox /bin/mkdir /bin/mkdir
-COPY --from=busybox /bin/chown /bin/chown
+COPY --from=jdk /bin/mkdir /bin/mkdir
+COPY --from=jdk /bin/chown /bin/chown
 
 ENV TZ="Europe/Oslo"
 WORKDIR /app
