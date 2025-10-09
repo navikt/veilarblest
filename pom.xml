@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.4</version>
+        <version>3.5.6</version>
         <relativePath/>
     </parent>
 
@@ -17,7 +17,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <common.version>3.2025.03.06_11.40-cbc2a0783de9</common.version>
+        <common.version>3.2025.09.03_08.33-728ff4acbfdb</common.version>
     </properties>
 
     <repositories>
@@ -160,7 +160,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.2</version>
+            <version>42.7.8</version>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
