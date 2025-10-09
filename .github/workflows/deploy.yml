@@ -29,7 +29,7 @@ jobs:
         with:
           java-version: 21
           distribution: 'temurin'
-          cache: 'gradle'
+          cache: 'maven'
       - name: Build maven artifacts
         run: mvn -B package
       - name: Push docker image to Google Artifact Registry
