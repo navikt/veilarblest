@@ -5,4 +5,4 @@ WORKDIR /app
 COPY target/veilarblest.jar veilarblest.jar
 EXPOSE 8080
 USER nonroot
-CMD ["veilarblest.jar"]
+ENTRYPOINT ["java", "-jar", "veilarblest.jar"]
