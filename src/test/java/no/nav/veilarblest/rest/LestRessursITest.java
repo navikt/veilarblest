@@ -10,7 +10,6 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 
@@ -18,6 +17,8 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
+
+import static no.nav.common.json.JsonUtils.fromJsonArray;
 
 public class LestRessursITest extends SpringBootTestBase {
 
@@ -45,14 +46,17 @@ public class LestRessursITest extends SpringBootTestBase {
                 .put("http://localhost/veilarblest/api/informasjon/les?versjon={versjon}", "versjon1")
                 .then()
                 .statusCode(204);
-        List<LestDto> lestDtos = RestAssured.given()
+
+        String responsBody = RestAssured.given()
                 .port(port)
                 .get("http://localhost/veilarblest/api/aktivitetsplan/les?fnr={fnr}", "01010101010")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .jsonPath().getList(".", LestDto.class);
+                .asString();
+
+        List<LestDto> lestDtos = fromJsonArray(responsBody, LestDto.class);
 
         Assertions.assertThat(lestDtos).hasSize(1);
         ConsumerRecord<String, String> singleRecord = KafkaTestUtils.getSingleRecord(kafkaConsumer, "veileder-har-lest-aktivitetsplanen", Duration.ofMillis(10000));
