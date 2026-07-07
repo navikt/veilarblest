@@ -7,7 +7,7 @@ package no.nav.veilarblest.domain;
 import jakarta.annotation.Generated;
 
 import org.jooq.Sequence;
-import org.jooq.impl.SequenceImpl;
+import org.jooq.impl.DSL;
 
 
 /**
@@ -26,10 +26,10 @@ public class Sequences {
     /**
      * The sequence <code>public.lest_id_seq</code>
      */
-    public static final Sequence<Integer> LEST_ID_SEQ = new SequenceImpl<Integer>("lest_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.INTEGER.nullable(false));
+    public static final Sequence<Integer> LEST_ID_SEQ = DSL.sequence(DSL.name("public", "lest_id_seq"), org.jooq.impl.SQLDataType.INTEGER.nullable(false));
 
     /**
      * The sequence <code>public.mine_ressurser_id_seq</code>
      */
-    public static final Sequence<Integer> MINE_RESSURSER_ID_SEQ = new SequenceImpl<Integer>("mine_ressurser_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.INTEGER.nullable(false));
+    public static final Sequence<Integer> MINE_RESSURSER_ID_SEQ = DSL.sequence(DSL.name("public", "mine_ressurser_id_seq"), org.jooq.impl.SQLDataType.INTEGER.nullable(false));
 }
