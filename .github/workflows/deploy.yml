@@ -11,16 +11,13 @@ concurrency:
 env:
   PRINT_PAYLOAD: true
 
-permissions:
-  contents: read
-  id-token: write
-
 jobs:
   test-build-and-push:
     name: Test, build and push
     runs-on: ubuntu-latest
-    outputs:
-      image: ${{ steps.docker-build-push.outputs.image }}
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -32,11 +29,6 @@ jobs:
           cache: 'maven'
       - name: Build maven artifacts
         run: mvn -B package
-      - name: Push docker image to Google Artifact Registry
-        uses: nais/docker-build-push@v0
-        id: docker-build-push
-        with:
-          team: dab
       - name: Slack Notification (test failure)
         if: failure()
         uses: rtCamp/action-slack-notify@v2
@@ -47,36 +39,48 @@ jobs:
           SLACK_TITLE: 'Veilarblest: tester feilet under deploy til prod'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_MESSAGE: 'Commit-message til feilende deploy: ${{ github.event.head_commit.message }}'
+      - name: Push docker image to GAR
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: dab
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
+      telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
 
   deploy-dev:
     name: Deploy application to dev
     needs: test-build-and-push
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Deploy application
+      - name: Deploy application to dev
         uses: nais/deploy/actions/deploy@v3
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: nais-dev.yaml
-          VAR: image=${{ needs.test-build-and-push.outputs.image }}
+          VAR: image=${{ needs.test-build-push.outputs.image }}
+          TELEMETRY: ${{ needs.test-build-push.outputs.telemetry }}
 
   deploy-prod:
     name: Deploy application to prod
     needs: test-build-and-push
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Deploy application
+      - name: Deploy application to prod
         uses: nais/deploy/actions/deploy@v3
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: nais.yaml
-          VAR: image=${{ needs.test-build-and-push.outputs.image }}
+          VAR: image=${{ needs.test-build-push.outputs.image }}
+          TELEMETRY: ${{ needs.test-build-push.outputs.telemetry }}
       - name: Slack Notification (deploy failure)
         if: failure()
         uses: rtCamp/action-slack-notify@v2

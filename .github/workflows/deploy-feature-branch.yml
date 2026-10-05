@@ -8,8 +8,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  IMAGE_TAG: ${{ github.sha }}
-  IMAGE: ghcr.io/${{ github.repository }}/veilarblest
   PRINT_PAYLOAD: true
 
 jobs:
@@ -17,10 +15,8 @@ jobs:
     name: Test, build and push
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
-    outputs:
-      image: ${{ steps.docker-build-push.outputs.image }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -32,23 +28,28 @@ jobs:
           cache: 'maven'
       - name: Build maven artifacts
         run: mvn -B package
-      - name: Push docker image to Google Artifact Registry
+      - name: Build and push Docker image
         uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
           team: dab
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
+      telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
 
   deploy-dev:
     name: Deploy application to dev
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Deploy application
         uses: nais/deploy/actions/deploy@v3
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: nais-dev.yaml
           VAR: image=${{ needs.build.outputs.image }}
+          TELEMETRY: ${{ needs.build.outputs.telemetry }}
