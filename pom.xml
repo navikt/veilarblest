@@ -155,7 +155,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.13</version>
+            <version>42.7.14</version>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
@@ -197,7 +197,7 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>6.0.1</version>
+            <version>6.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
