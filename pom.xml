@@ -17,7 +17,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <common.version>4.2026.10.19_05.55-7add0b457c1d</common.version>
+        <common.version>4.2026.11.05_07.24-dd0ce2805c16</common.version>
         <tomcat.version>11.0.27</tomcat.version>
     </properties>
 
